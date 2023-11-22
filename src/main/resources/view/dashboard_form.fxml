@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="root" prefHeight="870.0" prefWidth="1270.0" style="-fx-background-color: #DCDEE2; -fx-background-radius: 25;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.t_shop.controller.DashboardFromController">
+   <children>
+      <Label layoutX="64.0" layoutY="30.0" text="Home">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btnOrderHis" layoutX="66.0" layoutY="238.0" onAction="#btnPrintOrderHisOnAction" prefHeight="82.0" prefWidth="363.0" style="-fx-background-radius: 8; -fx-background-color: #808080;" text="          Print Item Order Hitory" textFill="WHITE">
+         <font>
+            <Font name="FreeSerif" size="23.0" />
+         </font></JFXButton>
+      <Pane layoutX="66.0" layoutY="79.0" prefHeight="137.0" prefWidth="363.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 8;">
+         <children>
+            <Label layoutX="154.0" layoutY="8.0" text="Time">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableTime" layoutX="14.0" layoutY="67.0">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="441.0" layoutY="79.0" prefHeight="137.0" prefWidth="375.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 8;">
+         <children>
+            <Label layoutX="146.0" layoutY="-1.0" text="Date">
+               <font>
+                  <Font name="System Bold" size="25.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableDate" layoutX="14.0" layoutY="69.0">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="827.0" layoutY="79.0" prefHeight="243.0" prefWidth="415.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 8;">
+         <children>
+            <ImageView fitHeight="136.0" fitWidth="240.0" layoutX="17.0" layoutY="22.0" opacity="0.81" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icon/tailor-holding.png" />
+               </image></ImageView>
+            <Text layoutX="217.0" layoutY="38.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Number Of Customers :">
+               <font>
+                  <Font name="FreeSerif Bold" size="18.0" />
+               </font>
+            </Text>
+            <Text layoutX="225.0" layoutY="131.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Number Of Oreders  :">
+               <font>
+                  <Font name="FreeSerif Bold" size="18.0" />
+               </font>
+            </Text>
+            <Label fx:id="lablNumOfCust" layoutX="273.0" layoutY="57.0" text="10">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+            <Label fx:id="lablNumOfOrder" layoutX="273.0" layoutY="147.0" text="10">
+               <font>
+                  <Font size="35.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <ImageView fitHeight="78.0" fitWidth="67.0" layoutX="96.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icon/create-order-.png" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="64.0" layoutY="341.0" prefHeight="497.0" prefWidth="533.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 8;">
+         <children>
+            <PieChart fx:id="pieChart" layoutX="14.0" layoutY="33.0" />
+            <Circle fill="#dcf1f5" layoutX="264.0" layoutY="217.0" radius="70.0" stroke="#e4e0e0" strokeType="INSIDE" />
+            <Label layoutX="27.0" layoutY="457.0" text="Item Orders :" textFill="#3985f9">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label layoutX="264.0" layoutY="457.0" text="Sewing Orders :" textFill="#33d1ff">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableSewingOrderPres" layoutX="400.0" layoutY="457.0" prefHeight="21.0" prefWidth="56.0" text="20 %" textFill="#33d1ff">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableItemOrderPres" layoutX="140.0" layoutY="457.0" prefHeight="21.0" prefWidth="56.0" text="80 %" textFill="#3985f9">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableItemOrderPres1" layoutX="196.0" layoutY="457.0" prefHeight="21.0" prefWidth="19.0" text="\%" textFill="#3985f9">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableItemOrderPres11" layoutX="456.0" layoutY="457.0" prefHeight="21.0" prefWidth="19.0" text="\%" textFill="#33d1ff">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="611.0" layoutY="341.0" prefHeight="497.0" prefWidth="631.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 8;">
+         <children>
+            <ImageView fitHeight="374.0" fitWidth="515.0" layoutX="44.0" layoutY="23.0" opacity="0.75" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icon/tailorShopDashboard.jpg" />
+               </image>
+            </ImageView>
+            <Text layoutX="45.0" layoutY="424.0" smooth="false" strokeType="OUTSIDE" strokeWidth="0.0" text="Optimizes tailor shops, prioritizing personalization, ">
+               <font>
+                  <Font name="FreeSerif Bold" size="18.0" />
+               </font></Text>
+            <Text layoutX="45.0" layoutY="448.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Efficiency, and a competitive edge through innovative technology.">
+               <font>
+                  <Font name="FreeSerif Bold" size="18.0" />
+               </font></Text>
+         </children></AnchorPane>
+      <JFXButton layoutX="441.0" layoutY="238.0" onAction="#btnPrintRecOrderHisOnAction" prefHeight="82.0" prefWidth="375.0" style="-fx-background-color: #808080; -fx-background-radius: 8;" text="      Print Record Orders History" textFill="WHITE">
+         <font>
+            <Font name="FreeSerif" size="23.0" />
+         </font></JFXButton>
+      <ImageView fitHeight="78.0" fitWidth="67.0" layoutX="449.0" layoutY="246.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icon/create-order-.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
