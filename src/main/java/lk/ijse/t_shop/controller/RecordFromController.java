@@ -10,16 +10,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.t_shop.dto.customerDto;
 import lk.ijse.t_shop.dto.recordDto;
-import lk.ijse.t_shop.dto.tailorDto;
 import lk.ijse.t_shop.model.CustomerModel;
 import lk.ijse.t_shop.model.OrderModel;
 import lk.ijse.t_shop.model.RecordModel;
 import lk.ijse.t_shop.model.SaveRecordModel;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class RecordFromController {
     @FXML
@@ -276,8 +275,8 @@ public class RecordFromController {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
                 loadAllRecord();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Record not Found").show();
+            } else {
+                new Alert(Alert.AlertType.ERROR, "Record not Found").show();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -286,45 +285,164 @@ public class RecordFromController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-       String id= textRecordId.getText();
-       String type =textType.getText();
-       double Cd = Double.parseDouble(textCrotchDep.getText());
-       double rice = Double.parseDouble(textRice.getText());
-       double legOpen = Double.parseDouble(textLegOpe.getText());
-       double kneeCrium = Double.parseDouble(textKneeCirum.getText());
-       double thighCirum = Double.parseDouble(textThighCirum.getText());
-       double outSleam = Double.parseDouble(textOutSeamL.getText());
-       double inseamL = Double.parseDouble(textInseamL.getText());
-       double hiperC = Double.parseDouble(textHipsCircum.getText());
-       double waistC = Double.parseDouble(textWaistCircum.getText());
-       double Cuffc = Double.parseDouble(textCuffCirum.getText());
-       double neckC = Double.parseDouble(textNeckCirum.getText());
-       double chestC = Double.parseDouble(textChestCirum.getText());
-       double shirtL = Double.parseDouble(textShirtL.getText());
-       double shoulderW = Double.parseDouble(textShoulderWid.getText());
-       double sleevL = Double.parseDouble(textSleeveL.getText());
-       double bicepC = Double.parseDouble(textBicepCircum.getText());
-       double sleevO = Double.parseDouble(textSleeveOp.getText());
-       double coller = Double.parseDouble(textColler.getText());
-       String orderId = lableOrderId.getText();
-       String price = textPayment.getText();
-       LocalDate date = LocalDate.parse(lableDate.getText());
-       String customerId = combCust.getValue();
-        var dto = new recordDto(id,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,customerId);
+      if (validateInputs()) {
+          String id = textRecordId.getText();
+          String type = textType.getText();
+          double Cd = Double.parseDouble(textCrotchDep.getText());
+          double rice = Double.parseDouble(textRice.getText());
+          double legOpen = Double.parseDouble(textLegOpe.getText());
+          double kneeCrium = Double.parseDouble(textKneeCirum.getText());
+          double thighCirum = Double.parseDouble(textThighCirum.getText());
+          double outSleam = Double.parseDouble(textOutSeamL.getText());
+          double inseamL = Double.parseDouble(textInseamL.getText());
+          double hiperC = Double.parseDouble(textHipsCircum.getText());
+          double waistC = Double.parseDouble(textWaistCircum.getText());
+          double Cuffc = Double.parseDouble(textCuffCirum.getText());
+          double neckC = Double.parseDouble(textNeckCirum.getText());
+          double chestC = Double.parseDouble(textChestCirum.getText());
+          double shirtL = Double.parseDouble(textShirtL.getText());
+          double shoulderW = Double.parseDouble(textShoulderWid.getText());
+          double sleevL = Double.parseDouble(textSleeveL.getText());
+          double bicepC = Double.parseDouble(textBicepCircum.getText());
+          double sleevO = Double.parseDouble(textSleeveOp.getText());
+          double coller = Double.parseDouble(textColler.getText());
+          String orderId = lableOrderId.getText();
+          String price = textPayment.getText();
+          LocalDate date = LocalDate.parse(lableDate.getText());
+          String customerId = combCust.getValue();
+          var dto = new recordDto(id, type, Cd, rice, legOpen, kneeCrium, thighCirum, outSleam, inseamL, hiperC, waistC, Cuffc, neckC, chestC, shirtL, shoulderW, sleevL, bicepC, sleevO, coller, orderId, price, customerId);
 
-        try {
-            boolean isSaved = saveRecordModel.saveRecord(dto,date);
-            if (isSaved){
-                new Alert(Alert.AlertType.INFORMATION,"Record Saved Successful").show();
-                clearFiled();
-                loadAllRecord();
-            }
-        } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR,e.getMessage()).show();
-            throw new RuntimeException(e);
-        }
+          try {
+              boolean isSaved = saveRecordModel.saveRecord(dto, date);
+              if (isSaved) {
+                  new Alert(Alert.AlertType.INFORMATION, "Record Saved Successful").show();
+                  clearFiled();
+                  loadAllRecord();
+              }
+          } catch (SQLException e) {
+              new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+              throw new RuntimeException(e);
+          }
+      }
     }
-    @FXML
+    private boolean validateInputs() {
+        boolean id = Pattern.matches("[R][0-9]{3,}", textRecordId.getText());
+        if (!id) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Id !!").show();
+            return false;
+        }
+        boolean type = Pattern.matches("[A-Za-z]{4,}", textType.getText());
+        if (!type) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Type !!").show();
+            return false;
+        }
+        boolean CrotchDep = Pattern.matches("[0-9.]{1,}", textCrotchDep.getText());
+        if (!CrotchDep) {
+            new Alert(Alert.AlertType.ERROR, "Invalid CrotchDept !!").show();
+            return false;
+        }
+        boolean rice = Pattern.matches("[0-9.]{1,}", textRice.getText());
+        if (!rice) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Rice !!").show();
+            return false;
+        }
+        boolean legOp = Pattern.matches("[0-9.]{1,}", textLegOpe.getText());
+        if (!legOp) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Leg Open !!").show();
+            return false;
+        }
+        boolean KC = Pattern.matches("[0-9.]{1,}", textKneeCirum.getText());
+        if (!KC) {
+            new Alert(Alert.AlertType.ERROR, "Invalid KneeCrim !!").show();
+            return false;
+        }
+        boolean Tc = Pattern.matches("[0-9.]{1,}", textThighCirum.getText());
+        if (!Tc) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ThighCrim!!").show();
+            return false;
+        }
+        boolean Os = Pattern.matches("[0-9.]{1,}", textOutSeamL.getText());
+        if (!Os) {
+            new Alert(Alert.AlertType.ERROR, "Invalid OutSeamL !!").show();
+            return false;
+        }
+        boolean IL = Pattern.matches("[0-9.]{1,}", textInseamL.getText());
+        if (!IL) {
+            new Alert(Alert.AlertType.ERROR, "Invalid InseamL !!").show();
+            return false;
+        }
+        boolean HC = Pattern.matches("[0-9.]{1,}", textHipsCircum.getText());
+        if (!HC) {
+            new Alert(Alert.AlertType.ERROR, "Invalid HipsCircum !!").show();
+            return false;
+        }
+        boolean Wc = Pattern.matches("[0-9.]{1,}", textWaistCircum.getText());
+        if (!Wc) {
+            new Alert(Alert.AlertType.ERROR, "Invalid WaistCircum !!").show();
+            return false;
+        }
+        boolean CC = Pattern.matches("[0-9.]{1,}", textCuffCirum.getText());
+        if (!CC) {
+            new Alert(Alert.AlertType.ERROR, "Invalid CuffCirum !!").show();
+            return false;
+        }
+        boolean Nc = Pattern.matches("[0-9.]{1,}", textNeckCirum.getText());
+        if (!Nc) {
+            new Alert(Alert.AlertType.ERROR, "Invalid NeckCirum !!").show();
+            return false;
+        }
+        boolean Ccri = Pattern.matches("[0-9.]{1,}", textChestCirum.getText());
+        if (!Ccri) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ChestCirum !!").show();
+            return false;
+        }
+        boolean Sl = Pattern.matches("[0-9.]{1,}", textShirtL.getText());
+        if (!Sl) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ShirtL !!").show();
+            return false;
+        }
+
+        boolean Sw = Pattern.matches("[0-9.]{1,}", textShoulderWid.getText());
+        if (!Sw) {
+            new Alert(Alert.AlertType.ERROR, "Invalid ShoulderWid !!").show();
+            return false;
+        }
+
+        boolean sl = Pattern.matches("[0-9.]{1,}", textSleeveL.getText());
+        if (!sl) {
+            new Alert(Alert.AlertType.ERROR, "Invalid SleeveL !!").show();
+            return false;
+        }
+
+        boolean Bc = Pattern.matches("[0-9.]{1,}", textBicepCircum.getText());
+        if (!Bc) {
+            new Alert(Alert.AlertType.ERROR, "Invalid BicepCircum !!").show();
+            return false;
+        }
+
+        boolean So = Pattern.matches("[0-9.]{1,}", textSleeveOp.getText());
+        if (!So) {
+            new Alert(Alert.AlertType.ERROR, "Invalid SleeveOp !!").show();
+            return false;
+        }
+
+        boolean Coller = Pattern.matches("[0-9.]{1,}", textColler.getText());
+        if (!Coller) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Coller !!").show();
+            return false;
+        }
+        boolean price = Pattern.matches("[0-9]{1,}", textPayment.getText());
+        if (!price) {
+            new Alert(Alert.AlertType.ERROR, "Invalid Price!!").show();
+            return false;
+        }
+        return true;
+    }
+
+
+
+
+        @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String id= textRecordId.getText();
         String type =textType.getText();
@@ -395,7 +513,6 @@ public class RecordFromController {
                 lableOrderId.setText(dto.getOrderId());
                 textPayment.setText(dto.getPrice());
                 combCust.setValue(dto.getCustId());
-
             }else {
                 new Alert(Alert.AlertType.ERROR,"Record not found").show();
             }
@@ -436,7 +553,6 @@ public class RecordFromController {
                         )
                 );
             }
-
             tableRecord.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);

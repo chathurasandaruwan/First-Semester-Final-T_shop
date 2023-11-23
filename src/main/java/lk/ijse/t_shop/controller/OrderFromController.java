@@ -214,21 +214,21 @@ public class OrderFromController {
         setRemoveBtnAction(btn);
         btn.setCursor(Cursor.HAND);
 
-        if (quntity>0) {
+        if (quntity>0 && qty<=quntity) {
             if (!obList.isEmpty()) {
                 for (int i = 0; i < tableOrder.getItems().size(); i++) {
-                    if (colItemCode.getCellData(i).equals(code)) {
-                        int col_qty = (int) colQty.getCellData(i);
-                        qty += col_qty;
-                        tot += (unitPrice - (unitPrice * (discount / 100))) * qty;
+                        if (colItemCode.getCellData(i).equals(code)) {
+                            int col_qty = (int) colQty.getCellData(i);
+                            qty += col_qty;
+                            tot += (unitPrice - (unitPrice * (discount / 100))) * qty;
 
-                        obList.get(i).setQty(qty);
-                        obList.get(i).setTot(tot);
+                            obList.get(i).setQty(qty);
+                            obList.get(i).setTot(tot);
 
-                        calculateTotal();
-                        tableOrder.refresh();
-                        return;
-                    }
+                            calculateTotal();
+                            tableOrder.refresh();
+                            return;
+                        }
                 }
             }
             var cartTm = new CartTm(code, description, unitPrice, qty, tot, discount, btn);
