@@ -205,6 +205,7 @@ public class OrderFromController {
         String code = combItemCode.getValue();
         String description = lableDesc.getText();
         int qty = Integer.parseInt(textQty.getText());
+        int quntity= Integer.parseInt(lableQuntity.getText());
         double unitPrice = Double.parseDouble(lablePrice.getText());
        double discount = Double.parseDouble(lableDiscountPre.getText());
         double tot = (unitPrice-(unitPrice*(discount/100))) * qty;
@@ -213,31 +214,34 @@ public class OrderFromController {
         setRemoveBtnAction(btn);
         btn.setCursor(Cursor.HAND);
 
+        if (quntity>0) {
+            if (!obList.isEmpty()) {
+                for (int i = 0; i < tableOrder.getItems().size(); i++) {
+                    if (colItemCode.getCellData(i).equals(code)) {
+                        int col_qty = (int) colQty.getCellData(i);
+                        qty += col_qty;
+                        tot += (unitPrice - (unitPrice * (discount / 100))) * qty;
 
-        if (!obList.isEmpty()) {
-            for (int i = 0; i < tableOrder.getItems().size(); i++) {
-                if (colItemCode.getCellData(i).equals(code)) {
-                    int col_qty = (int) colQty.getCellData(i);
-                    qty += col_qty;
-                    tot += (unitPrice-(unitPrice*(discount/100))) * qty;
+                        obList.get(i).setQty(qty);
+                        obList.get(i).setTot(tot);
 
-                    obList.get(i).setQty(qty);
-                    obList.get(i).setTot(tot);
-
-                    calculateTotal();
-                    tableOrder.refresh();
-                    return;
+                        calculateTotal();
+                        tableOrder.refresh();
+                        return;
+                    }
                 }
             }
+            var cartTm = new CartTm(code, description, unitPrice, qty, tot, discount, btn);
+
+            obList.add(cartTm);
+
+            tableOrder.setItems(obList);
+            calculateTotal();
+            clearFailed();
+            textQty.clear();
+        }else {
+            new Alert(Alert.AlertType.ERROR,"Item Out of stoke").show();
         }
-        var cartTm = new CartTm(code, description,unitPrice,qty,tot,discount, btn);
-
-        obList.add(cartTm);
-
-        tableOrder.setItems(obList);
-        calculateTotal();
-        clearFailed();
-        textQty.clear();
     }
     private void setRemoveBtnAction(Button btn) {
         btn.setOnAction((e) -> {

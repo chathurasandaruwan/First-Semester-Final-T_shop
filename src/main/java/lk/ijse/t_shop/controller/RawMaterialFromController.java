@@ -95,12 +95,13 @@ public class RawMaterialFromController {
     }
     @FXML
     void btnSaveOnAction(ActionEvent event) {
+        boolean isCorrect = validateInputs();
         String id = textId.getText();
         String name = textName.getText();
         int qty = Integer.parseInt(textQty.getText());
 
         var dto = new raw_materialDto(id,name,qty);
-        boolean isCorrect = validateInputs(dto);
+
         if (isCorrect) {
             try {
                 boolean isSaved = model.saveRawM(dto);
@@ -115,13 +116,13 @@ public class RawMaterialFromController {
             }
         }
     }
-    private boolean validateInputs(raw_materialDto dto) {
-        boolean matches = Pattern.compile("[R][0-9]{3,}").matcher(dto.getRawID()).matches();
+    private boolean validateInputs() {
+        boolean matches = Pattern.compile("[R][0-9]{3,}").matcher(textId.getText()).matches();
         if (!matches){
             new Alert(Alert.AlertType.ERROR,"Invalid Material Id !!").show();
             return false;
         }
-        boolean name = Pattern.matches("[A-Za-z]{4,}",dto.getName());
+        boolean name = Pattern.matches("[A-Za-z]{4,}",textName.getText());
         if (!name){
             new Alert(Alert.AlertType.ERROR,"Invalid Name !!").show();
             return false;

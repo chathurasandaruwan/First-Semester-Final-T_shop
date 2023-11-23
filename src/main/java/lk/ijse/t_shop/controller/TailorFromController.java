@@ -108,12 +108,12 @@ public class TailorFromController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
+        boolean isCorrect = validateInputs();
        String id= textId.getText();
        String name = textName.getText();
        int tel = Integer.parseInt(textTel.getText());
        String itemCode = combItem.getValue();
        var dto =new tailorDto(id,name,tel,itemCode);
-       boolean isCorrect = validateInputs(dto);
        if (isCorrect) {
            try {
                boolean isSaved = model.saveTailor(dto);
@@ -128,13 +128,13 @@ public class TailorFromController {
            }
        }
     }
-    private boolean validateInputs(tailorDto dto) {
-        boolean matches = Pattern.compile("[T][0-9]{3,}").matcher(dto.getTailerId()).matches();
+    private boolean validateInputs() {
+        boolean matches = Pattern.compile("[T][0-9]{3,}").matcher(textId.getText()).matches();
         if (!matches){
             new Alert(Alert.AlertType.ERROR,"Invalid Tailor Id !!").show();
             return false;
         }
-        boolean name = Pattern.matches("[A-Za-z]{4,}",dto.getName());
+        boolean name = Pattern.matches("[A-Za-z]{4,}",textName.getText());
         if (!name){
             new Alert(Alert.AlertType.ERROR,"Invalid Name !!").show();
             return false;
@@ -152,7 +152,7 @@ public class TailorFromController {
        textName.setText("");
        textTel.setText("");
        combItem.setValue("");
-        textSearch.setText("");
+       textSearch.setText("");
     }
 
     @FXML

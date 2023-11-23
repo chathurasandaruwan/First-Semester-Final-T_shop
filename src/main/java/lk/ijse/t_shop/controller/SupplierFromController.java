@@ -120,18 +120,18 @@ public class SupplierFromController {
             throw new RuntimeException(e);
         }
     }
-    private boolean validateInputs(supplierDto dto) {
-        boolean matches = Pattern.compile("[S][0-9]{3,}").matcher(dto.getSupId()).matches();
+    private boolean validateInputs() {
+        boolean matches = Pattern.compile("[S][0-9]{3,}").matcher(textSupId.getText()).matches();
         if (!matches){
             new Alert(Alert.AlertType.ERROR,"Invalid Supplier Id !!").show();
             return false;
         }
-        boolean name = Pattern.matches("[A-Za-z]{4,}",dto.getName());
+        boolean name = Pattern.matches("[A-Za-z]{4,}",textName.getText());
         if (!name){
             new Alert(Alert.AlertType.ERROR,"Invalid Name !!").show();
             return false;
         }
-        boolean desc =Pattern.matches("[A-Za-z]{4,}",dto.getDescription());
+        boolean desc =Pattern.matches("[A-Za-z]{4,}",textDesc.getText());
         if (!desc){
             new Alert(Alert.AlertType.ERROR,"Invalid Contact No !!").show();
             return false;
@@ -146,12 +146,12 @@ public class SupplierFromController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
-        String supId = textSupId.getText();
+        boolean isCorrect = validateInputs();
+       String supId = textSupId.getText();
         String name = textName.getText();
         String description = textDesc.getText();
         String contacNo = textContactNo.getText();
         var dto = new supplierDto(supId,name,description,contacNo);
-        boolean isCorrect = validateInputs(dto);
         if (isCorrect) {
             try {
                 boolean isSaved = model.saveSupllier(dto);

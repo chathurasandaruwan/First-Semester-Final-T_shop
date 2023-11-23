@@ -52,28 +52,28 @@
                <children>
                   <TableView fx:id="tableRecord" layoutX="3.0" layoutY="8.0" prefHeight="361.0" prefWidth="1248.0" style="-fx-background-radius: 9;">
                     <columns>
-                      <TableColumn fx:id="columnRecordID" prefWidth="48.0" text="Record ID " />
-                      <TableColumn fx:id="columnType" minWidth="0.0" prefWidth="49.0" text="Type" />
-                        <TableColumn fx:id="columnOrderID" prefWidth="64.0" text="Order ID " />
-                        <TableColumn fx:id="columnCrotchDepth" prefWidth="50.0" text="CrotchDepth" />
-                        <TableColumn fx:id="columnRise" prefWidth="54.0" text="Rise" />
-                        <TableColumn fx:id="columnLegOpening" prefWidth="77.0" text="LegOpening" />
-                        <TableColumn fx:id="columnKneeCirumference" prefWidth="76.0" text="KneeCirumference" />
-                        <TableColumn fx:id="columnThighCirumference" prefWidth="55.0" text="ThighCirumference" />
-                        <TableColumn fx:id="columnInseamLength" prefWidth="49.0" text="InseamLength" />
-                        <TableColumn fx:id="columnOutSeamLength" prefWidth="50.0" text="OutSeamLength" />
-                        <TableColumn fx:id="columnHipsCircumference" prefWidth="31.0" text="HipsCircumference" />
-                        <TableColumn fx:id="columnWaistCircumferencr" prefWidth="36.0" text="WaistCircumferencr" />
-                        <TableColumn fx:id="columnCuffCirumference" prefWidth="39.0" text="CuffCirumference" />
-                        <TableColumn fx:id="columnNeckCirumference" prefWidth="30.0" text="NeckCirumference" />
-                        <TableColumn fx:id="columnChestCirumference" minWidth="5.0" prefWidth="36.0" text="ChestCirumference" />
-                        <TableColumn fx:id="columnShirtLength" prefWidth="31.0" text="ShirtLength" />
-                        <TableColumn fx:id="columnSleeveLength" prefWidth="38.0" text="SleeveLength" />
-                        <TableColumn fx:id="columnBicepCircumference" prefWidth="34.0" text="BicepCircumference" />
-                        <TableColumn fx:id="columnSleeveOpening" prefWidth="29.0" text="SleeveOpening" />
-                        <TableColumn fx:id="columnShoulderWidth" prefWidth="38.0" text="ShoulderWidth" />
-                        <TableColumn fx:id="columnColler" prefWidth="54.0" text="Coller" />
-                        <TableColumn fx:id="columnPrice" prefWidth="54.0" text="price" />
+                      <TableColumn fx:id="columnRecordID" prefWidth="88.0" text="Record ID " />
+                      <TableColumn fx:id="columnType" minWidth="0.0" prefWidth="91.0" text="Type" />
+                        <TableColumn fx:id="columnOrderID" prefWidth="85.0" text="Order ID " />
+                        <TableColumn fx:id="columnCrotchDepth" prefWidth="54.0" text="CrotchDepth" />
+                        <TableColumn fx:id="columnRise" prefWidth="43.0" text="Rise" />
+                        <TableColumn fx:id="columnLegOpening" prefWidth="50.0" text="LegOpening" />
+                        <TableColumn fx:id="columnKneeCirumference" prefWidth="53.0" text="KneeCirumference" />
+                        <TableColumn fx:id="columnThighCirumference" prefWidth="47.0" text="ThighCirumference" />
+                        <TableColumn fx:id="columnInseamLength" prefWidth="43.0" text="InseamLength" />
+                        <TableColumn fx:id="columnOutSeamLength" prefWidth="52.0" text="OutSeamLength" />
+                        <TableColumn fx:id="columnHipsCircumference" prefWidth="48.0" text="HipsCircumference" />
+                        <TableColumn fx:id="columnWaistCircumferencr" prefWidth="49.0" text="WaistCircumferencr" />
+                        <TableColumn fx:id="columnCuffCirumference" prefWidth="52.0" text="CuffCirumference" />
+                        <TableColumn fx:id="columnNeckCirumference" prefWidth="48.0" text="NeckCirumference" />
+                        <TableColumn fx:id="columnChestCirumference" minWidth="5.0" prefWidth="49.0" text="ChestCirumference" />
+                        <TableColumn fx:id="columnShirtLength" prefWidth="43.0" text="ShirtLength" />
+                        <TableColumn fx:id="columnSleeveLength" prefWidth="44.0" text="SleeveLength" />
+                        <TableColumn fx:id="columnBicepCircumference" prefWidth="44.0" text="BicepCircumference" />
+                        <TableColumn fx:id="columnSleeveOpening" prefWidth="40.0" text="SleeveOpening" />
+                        <TableColumn fx:id="columnShoulderWidth" prefWidth="46.0" text="ShoulderWidth" />
+                        <TableColumn fx:id="columnColler" prefWidth="93.0" text="Coller" />
+                        <TableColumn fx:id="columnPrice" prefWidth="85.0" text="price" />
                     </columns>
                   </TableView>
                </children>

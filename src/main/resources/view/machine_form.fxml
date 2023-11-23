@@ -61,9 +61,9 @@
             <TableView fx:id="tableMachine" layoutX="14.0" layoutY="14.0" prefHeight="825.0" prefWidth="580.0" style="-fx-background-radius: 25;">
               <columns>
                 <TableColumn fx:id="columnId" prefWidth="97.0" text="Code" />
-                <TableColumn fx:id="columnName" prefWidth="118.0" text="Name" />
-                  <TableColumn fx:id="columnType" prefWidth="126.0" text="Type" />
-                  <TableColumn fx:id="columnTId" prefWidth="136.0" text="TailorId" />
+                <TableColumn fx:id="columnName" prefWidth="152.0" text="Name" />
+                  <TableColumn fx:id="columnType" prefWidth="161.0" text="Type" />
+                  <TableColumn fx:id="columnTId" prefWidth="169.0" text="TailorId" />
               </columns>
             </TableView>
          </children>

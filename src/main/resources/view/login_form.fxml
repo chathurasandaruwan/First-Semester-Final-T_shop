@@ -27,11 +27,11 @@
          <children>
             <JFXTextField fx:id="textName" layoutX="72.0" layoutY="179.0" prefHeight="26.0" prefWidth="320.0" promptText="User name">
                <font>
-                  <Font name="FreeSerif Bold" size="20.0" />
+                  <Font name="FreeSerif Bold Italic" size="20.0" />
                </font></JFXTextField>
             <JFXPasswordField fx:id="textPassword" layoutX="72.0" layoutY="265.0" onAction="#textPasswordOnAction" prefHeight="26.0" prefWidth="320.0" promptText="Password">
                <font>
-                  <Font name="FreeSerif Bold" size="20.0" />
+                  <Font name="FreeSerif Bold Italic" size="20.0" />
                </font></JFXPasswordField>
             <JFXButton fx:id="btnSingIn" layoutX="72.0" layoutY="367.0" onAction="#btnSingInOnAction" prefHeight="37.0" prefWidth="125.0" style="-fx-background-color: #FF5733; -fx-background-radius: 12;" text="Sing in now" textFill="#e8dddd">
                <font>

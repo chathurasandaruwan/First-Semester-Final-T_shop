@@ -61,8 +61,8 @@
               <columns>
                 <TableColumn fx:id="columnId" prefWidth="85.0" text="Id" />
                 <TableColumn fx:id="columnName" prefWidth="194.0" text="Name" />
-                  <TableColumn fx:id="columnDesc" prefWidth="109.0" text="description" />
-                  <TableColumn fx:id="ColumnContactNo" prefWidth="156.0" text="Tel" />
+                  <TableColumn fx:id="columnDesc" prefWidth="219.0" text="description" />
+                  <TableColumn fx:id="ColumnContactNo" prefWidth="197.0" text="Tel" />
               </columns>
             </TableView>
          </children>

@@ -59,8 +59,8 @@
             <TableView fx:id="tableRawM" layoutX="14.0" layoutY="13.0" prefHeight="528.0" prefWidth="1216.0" style="-fx-background-radius: 10;">
               <columns>
                 <TableColumn fx:id="columnId" prefWidth="293.9999694824219" text="ID" />
-                <TableColumn fx:id="columnName" prefWidth="413.0" text="Name" />
-                  <TableColumn fx:id="columnQty" prefWidth="507.0" text="Qty" />
+                <TableColumn fx:id="columnName" prefWidth="504.0" text="Name" />
+                  <TableColumn fx:id="columnQty" prefWidth="416.0" text="Qty" />
               </columns>
             </TableView>
          </children>

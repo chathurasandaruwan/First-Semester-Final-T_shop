@@ -1,14 +1,12 @@
 package lk.ijse.t_shop.controller;
 
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import lk.ijse.t_shop.dto.customerDto;
 import lk.ijse.t_shop.dto.itemDto;
@@ -31,7 +29,7 @@ public class ItemFormController {
     private TextField textQty;
 
     @FXML
-    private TextField textType;
+    private ComboBox<String> comType;
 
     @FXML
     private JFXTextField textDiscount;
@@ -41,11 +39,10 @@ public class ItemFormController {
 
     @FXML
     private TextField textColor;
-
-    @FXML
-    private JFXTextField textSize;
     @FXML
     private TableView<itemTm> tablItem;
+    @FXML
+    private JFXComboBox<String> comSize;
     @FXML
     private TableColumn<?, ?> columnCode;
 
@@ -74,6 +71,26 @@ public class ItemFormController {
         genarateNextItemCode();
         selectAllFromItem();
         setvaluesFactory();
+        loadAllType();
+        loadAllSize();
+    }
+    public void loadAllSize(){
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        obList.add("S");
+        obList.add("M");
+        obList.add("L");
+        obList.add("XL");
+        comSize.setItems(obList);
+    }
+    public void loadAllType(){
+        ObservableList<String> obList = FXCollections.observableArrayList();
+        obList.add("Trouser");
+        obList.add("Shorts");
+        obList.add("Long sleeve shirt");
+        obList.add("Short sleeve shirt");
+        obList.add("long sleeve T shirt");
+        obList.add("Short sleeve T shirt");
+        comType.setItems(obList);
     }
     private void setvaluesFactory() {
         columnCode.setCellValueFactory(new PropertyValueFactory<>("itemCode"));
@@ -87,9 +104,9 @@ public class ItemFormController {
     public void clearFiled() throws SQLException {
         textItemCode.setText(model.genarateItemCode());
         textPrice.setText("");
-        textType.setText("");
+        comType.setValue("");
         textColor.setText("");
-        textSize.setText("");
+        comSize.setValue("");
         textDiscount.setText("");
         textQty.setText("");
         textSearch.setText("");
@@ -126,15 +143,15 @@ public class ItemFormController {
 
     @FXML
     void btnSaveOnAction(ActionEvent event) {
+        boolean isCorrect = validateCustomer();
         String itemCode =textItemCode.getText();
-        String type = textType.getText();
+        String type = comType.getValue();
         double price = Double.parseDouble(textPrice.getText());
         int quntity = Integer.parseInt(textQty.getText());
         double discountPercentage = Double.parseDouble(textDiscount.getText());
-        String size = textSize.getText();
+        String size = comSize.getValue();
         String color = textColor.getText();
         var dto = new itemDto(itemCode,type,price,quntity,discountPercentage,size,color);
-        boolean isCorrect = validateCustomer(dto);
         if (isCorrect) {
             try {
                 boolean isSaved = model.saveItem(dto);
@@ -149,15 +166,10 @@ public class ItemFormController {
             }
         }
     }
-    private boolean validateCustomer(itemDto dto) {
-        boolean matches = Pattern.compile("[I][0-9]{3,}").matcher(dto.getItemCode()).matches();
+    private boolean validateCustomer() {
+        boolean matches = Pattern.compile("[I][0-9]{3,}").matcher(textItemCode.getText()).matches();
         if (!matches) {
             new Alert(Alert.AlertType.ERROR, "Invalid Item Code !!").show();
-            return false;
-        }
-        boolean type = Pattern.matches("[A-Za-z]{4,}",dto.getType());
-        if (!type){
-            new Alert(Alert.AlertType.ERROR,"Invalid Type !!").show();
             return false;
         }
         boolean price = Pattern.matches("[0-9.]{1,}",textPrice.getText());
@@ -173,11 +185,6 @@ public class ItemFormController {
         boolean precentage = Pattern.matches("[0-9.]{1,}",textDiscount.getText());
         if (!precentage){
             new Alert(Alert.AlertType.ERROR,"Invalid Discount !!").show();
-            return false;
-        }
-        boolean size = Pattern.matches("[A-Z]{1,}",textSize.getText());
-        if (!size){
-            new Alert(Alert.AlertType.ERROR,"Invalid Size !!").show();
             return false;
         }
         boolean color = Pattern.matches("[A-Za-z]{2,}",textColor.getText());
@@ -216,11 +223,11 @@ public class ItemFormController {
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
         String code = textItemCode.getText();
-        String type =textType.getText();
+        String type =comType.getValue();
         double price= Double.parseDouble(textPrice.getText());
         int qty = Integer.parseInt(textQty.getText());
         double disc = Double.parseDouble(textDiscount.getText());
-        String size = textSize.getText();
+        String size = comSize.getValue();
         String color = textColor.getText();
 
         var dto = new itemDto(code,type,price,qty,disc,size,color);
@@ -245,11 +252,11 @@ public class ItemFormController {
             itemDto dto = model.searchItem(code);
             if (dto!= null){
                 textItemCode.setText(dto.getItemCode());
-                textType.setText(dto.getType());
+                comType.setValue(dto.getType());
                 textPrice.setText(String.valueOf(dto.getPrice()));
                 textQty.setText(String.valueOf(dto.getQuntity()));
                 textDiscount.setText(String.valueOf(dto.getDiscountPercentage()));
-                textSize.setText(dto.getSize());
+                comSize.setValue(dto.getSize());
                 textColor.setText(dto.getColor());
             }else {
                 new Alert(Alert.AlertType.ERROR,"Item not found").show();

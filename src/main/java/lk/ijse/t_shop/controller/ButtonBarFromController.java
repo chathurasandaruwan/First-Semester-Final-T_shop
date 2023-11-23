@@ -1,6 +1,5 @@
 package lk.ijse.t_shop.controller;
 
-import com.jfoenix.controls.JFXButton;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,9 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Optional;
@@ -23,35 +20,6 @@ public class ButtonBarFromController implements Serializable {
 
     @FXML
     private AnchorPane root;
-    @FXML
-    private JFXButton btnHome;
-
-    @FXML
-    private JFXButton btnItem;
-
-    @FXML
-    private JFXButton btnOrder;
-
-    @FXML
-    private JFXButton btnTailor;
-
-    @FXML
-    private JFXButton btnRecord;
-
-    @FXML
-    private JFXButton btnSupplier;
-
-    @FXML
-    private JFXButton btnMachine;
-
-    @FXML
-    private JFXButton btnCustomer;
-
-    @FXML
-    private JFXButton btnRawMaterials;
-
-    @FXML
-    private JFXButton btnLogOut;
 
     public void initialize() throws IOException {
         Parent rootNode =FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));

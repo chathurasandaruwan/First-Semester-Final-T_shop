@@ -348,7 +348,7 @@ public class RecordFromController {
         double coller = Double.parseDouble(textColler.getText());
         String orderId = lableOrderId.getText();
         String price = textPayment.getText();
-        LocalDate date = LocalDate.parse(lableDate.getText());
+      //  LocalDate date = LocalDate.parse(lableDate.getText());
         String customerId = combCust.getValue();
         var dto = new recordDto(id,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,customerId);
 
