@@ -24,7 +24,6 @@ public class AppInitializer extends Application {
         stage.setTitle("LOADING .............");
         stage.centerOnScreen();
 
-        //show scene to the crowd
         stage.show();
 
         Timeline timeline = new Timeline(new KeyFrame(

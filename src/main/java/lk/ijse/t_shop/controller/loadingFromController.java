@@ -20,7 +20,7 @@ public class loadingFromController {
             Duration.seconds(3),
             event -> updateLabel()
     ));
-        timeline.setCycleCount(Timeline.INDEFINITE); // Repeat indefinitely
+        timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 }
 
