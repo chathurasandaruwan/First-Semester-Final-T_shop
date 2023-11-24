@@ -222,6 +222,7 @@ public class ItemFormController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
+        boolean isCorrect = validateCustomer();
         String code = textItemCode.getText();
         String type =comType.getValue();
         double price= Double.parseDouble(textPrice.getText());
@@ -231,17 +232,19 @@ public class ItemFormController {
         String color = textColor.getText();
 
         var dto = new itemDto(code,type,price,qty,disc,size,color);
-        try {
-            boolean isUpdate = model.updateItem(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                selectAllFromItem();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Item Not Found").show();
+        if (isCorrect) {
+            try {
+                boolean isUpdate = model.updateItem(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    selectAllFromItem();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Item Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

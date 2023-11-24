@@ -444,6 +444,7 @@ public class RecordFromController {
 
         @FXML
     void btnUpdateOnAction(ActionEvent event) {
+        boolean isCorrect = validateInputs();
         String id= textRecordId.getText();
         String type =textType.getText();
         double Cd = Double.parseDouble(textCrotchDep.getText());
@@ -469,18 +470,19 @@ public class RecordFromController {
       //  LocalDate date = LocalDate.parse(lableDate.getText());
         String customerId = combCust.getValue();
         var dto = new recordDto(id,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,customerId);
-
-        try {
-            boolean isUpdate = model.updateRecord(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                loadAllRecord();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Record Not Found").show();
+        if (isCorrect) {
+            try {
+                boolean isUpdate = model.updateRecord(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    loadAllRecord();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Record Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

@@ -157,23 +157,25 @@ public class TailorFromController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
-        String id = textId.getText();
+       boolean isCorrect = validateInputs();
+       String id = textId.getText();
         String name = textName.getText();
         int tel = Integer.parseInt(textTel.getText());
         String itemCode = combItem.getValue();
-
-        var dto = new tailorDto(id,name,tel,itemCode);
-        try {
-            boolean isUpdate = model.updateTailor(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                loadAllTailor();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Tailor Not Found").show();
+        if (isCorrect) {
+            var dto = new tailorDto(id, name, tel, itemCode);
+            try {
+                boolean isUpdate = model.updateTailor(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    loadAllTailor();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Tailor Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

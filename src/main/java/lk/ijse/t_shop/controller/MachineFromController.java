@@ -189,17 +189,20 @@ public class MachineFromController {
         String tId = comTailerId.getValue();
 
         var dto = new machineDto(code,name,type,tId);
-        try {
-            boolean isUpdate = model.updateMachine(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                selectAllMachine();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Machine Not Found").show();
+        boolean isCorrect = validateInputs(dto);
+        if (isCorrect) {
+            try {
+                boolean isUpdate = model.updateMachine(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    selectAllMachine();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Machine Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

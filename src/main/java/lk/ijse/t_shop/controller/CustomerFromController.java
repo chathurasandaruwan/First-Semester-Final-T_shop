@@ -147,17 +147,20 @@ public class CustomerFromController {
         String tel = texTel.getText();
 
         var dto = new customerDto(id,name,address,tel);
-        try {
-            boolean isUpdate = model.updateCustomer(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                selectAllFromCustomer();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Customer Not Found").show();
+        boolean isCorrect = validateCustomer(dto);
+        if (isCorrect) {
+            try {
+                boolean isUpdate = model.updateCustomer(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    selectAllFromCustomer();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Customer Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
     @FXML

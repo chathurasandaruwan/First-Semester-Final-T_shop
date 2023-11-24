@@ -84,23 +84,25 @@ public class SupplierFromController {
 
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
+        boolean isCorrect = validateInputs();
         String id = textSupId.getText();
         String name = textName.getText();
         String address = textDesc.getText();
         String tel = textContactNo.getText();
-
-        var dto = new supplierDto(id,name,address,tel);
-        try {
-            boolean isUpdate = model.updateSupplier(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                SelectAllSup();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Customer Not Found").show();
+        if (isCorrect) {
+            var dto = new supplierDto(id, name, address, tel);
+            try {
+                boolean isUpdate = model.updateSupplier(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    SelectAllSup();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Customer Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 

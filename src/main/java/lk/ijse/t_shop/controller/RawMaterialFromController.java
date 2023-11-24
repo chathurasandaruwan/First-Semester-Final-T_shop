@@ -160,22 +160,25 @@ public class RawMaterialFromController {
     }
     @FXML
     void btnUpdateOnAction(ActionEvent event) {
+        boolean isCorrect = validateInputs();
         String id = textId.getText();
         String name = textName.getText();
         int qty = Integer.parseInt(textQty.getText());
 
         var dto = new raw_materialDto(id,name,qty);
-        try {
-            boolean isUpdate = model.updateMaterial(dto);
-            if (isUpdate){
-                new Alert(Alert.AlertType.INFORMATION,"Update Successfully").show();
-                clearFiled();
-                selectAllMaterial();
-            }else {
-                new Alert(Alert.AlertType.ERROR,"Material Not Found").show();
+        if (isCorrect) {
+            try {
+                boolean isUpdate = model.updateMaterial(dto);
+                if (isUpdate) {
+                    new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
+                    clearFiled();
+                    selectAllMaterial();
+                } else {
+                    new Alert(Alert.AlertType.ERROR, "Material Not Found").show();
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
     }
 
