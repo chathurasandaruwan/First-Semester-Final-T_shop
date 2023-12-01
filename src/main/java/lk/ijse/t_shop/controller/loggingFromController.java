@@ -1,23 +1,23 @@
 package lk.ijse.t_shop.controller;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import lk.ijse.t_shop.dto.userDto;
+import lk.ijse.t_shop.model.LoggingModel;
 import org.controlsfx.control.Notifications;
 
-import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class loggingFromController {
-
+    private LoggingModel loggingModel=new LoggingModel();
     @FXML
     private AnchorPane rootLogIn;
 
@@ -29,9 +29,12 @@ public class loggingFromController {
 
     @FXML
     private JFXPasswordField textPassword;
+    userDto dto=loggingModel.getAllInfo();
+     String userName=dto.getUsername();
+     String Password=dto.getPassword();
 
-     String userName="chathura";
-     String Password="12345";
+    public loggingFromController() throws SQLException {
+    }
 
 
     @FXML
@@ -76,5 +79,16 @@ public class loggingFromController {
             textPassword.setText(textPassword.getPromptText());
             textPassword.setPromptText("");
         }
+    }
+    @FXML
+    void btnForgetPasswordOnAction(ActionEvent event) throws IOException {
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/forgotPassword_form.fxml"));
+        Scene scene = new Scene(anchorPane);
+
+        Stage stage = (Stage) rootLogIn.getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("ForgetPassword");
+        stage.centerOnScreen();
+
     }
 }

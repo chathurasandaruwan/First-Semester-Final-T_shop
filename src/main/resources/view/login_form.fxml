@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.image.Image?>
@@ -27,16 +28,19 @@
          <children>
             <JFXTextField fx:id="textName" layoutX="72.0" layoutY="179.0" prefHeight="26.0" prefWidth="320.0" promptText="User name">
                <font>
-                  <Font name="FreeSerif Bold Italic" size="20.0" />
+                  <Font name="System Bold Italic" size="15.0" />
                </font></JFXTextField>
             <JFXPasswordField fx:id="textPassword" layoutX="72.0" layoutY="265.0" onAction="#textPasswordOnAction" prefHeight="26.0" prefWidth="320.0" promptText="Password">
                <font>
-                  <Font name="FreeSerif Bold Italic" size="20.0" />
+                  <Font name="System Bold Italic" size="15.0" />
                </font></JFXPasswordField>
-            <JFXButton fx:id="btnSingIn" layoutX="72.0" layoutY="367.0" onAction="#btnSingInOnAction" prefHeight="37.0" prefWidth="125.0" style="-fx-background-color: #FF5733; -fx-background-radius: 12;" text="Sing in now" textFill="#e8dddd">
+            <JFXButton fx:id="btnSingIn" layoutX="72.0" layoutY="357.0" onAction="#btnSingInOnAction" prefHeight="37.0" prefWidth="320.0" style="-fx-background-color: #FF5733; -fx-background-radius: 12;" text="LOGIN" textFill="#e8dddd">
                <font>
-                  <Font name="Liberation Serif Bold Italic" size="17.0" />
+                  <Font name="System Bold Italic" size="17.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
             <Label layoutX="148.0" layoutY="59.0" text="Sing in">
                <font>
@@ -51,7 +55,17 @@
             <ToggleButton fx:id="btnToggle" layoutX="389.0" layoutY="269.0" mnemonicParsing="false" onAction="#btnToggleOnAction" opacity="0.63" prefHeight="30.0" prefWidth="51.0" text="SHOW">
                <font>
                   <Font size="10.0" />
-               </font></ToggleButton>
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ToggleButton>
+            <JFXButton layoutX="258.0" layoutY="394.0" onAction="#btnForgetPasswordOnAction" text="Forgot Password ?">
+               <font>
+                  <Font name="FreeSerif" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXButton>
          </children>
       </Pane>
       <Label layoutX="95.0" layoutY="85.0" text="Welcome" textFill="#171616">
