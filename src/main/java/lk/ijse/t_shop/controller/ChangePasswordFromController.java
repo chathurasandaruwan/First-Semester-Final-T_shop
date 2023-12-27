@@ -11,7 +11,11 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import lk.ijse.t_shop.model.ChangePasswordModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.ChangePasswordBO;
+import lk.ijse.t_shop.bo.custom.impl.ChangePasswordBOImpl;
+import lk.ijse.t_shop.dao.custom.ChangePasswordDAO;
+import lk.ijse.t_shop.dao.custom.impl.ChangePasswordDAOImpl;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
@@ -35,10 +39,10 @@ public class ChangePasswordFromController {
 
     @FXML
     private Button btnChangePassword;
-    private ChangePasswordModel changePasswordModel=new ChangePasswordModel();
+    ChangePasswordBO changePasswordBO = (ChangePasswordBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CHANGE_PASSWORD);
 
     @FXML
-    void btnChangePasswordOnAction(ActionEvent event) throws IOException, SQLException {
+    void btnChangePasswordOnAction(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         boolean isCorrect = validateInputs();
         if (isCorrect) {
             String newPassword = textNewPassword.getText();
@@ -46,10 +50,10 @@ public class ChangePasswordFromController {
             if (newPassword.equals(confirmPassword)) {
                 Optional<ButtonType> type = new Alert(Alert.AlertType.INFORMATION, "Do you want to change Password", NO, YES).showAndWait();
                 if (type.orElse(NO) == YES) {
-                    boolean isChange = changePasswordModel.changePassword(newPassword);
+                    boolean isChange = changePasswordBO.changeNewPassword(newPassword);
                     if (isChange) {
                         showInformationNotification("Successful", "Password change Successful");
-                        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
+                        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/login_form.fxml"));
                         Scene scene = new Scene(anchorPane);
 
                         Stage stage = (Stage) changeRoot.getScene().getWindow();
@@ -73,7 +77,7 @@ public class ChangePasswordFromController {
     }
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/login_form.fxml"));
         Scene scene = new Scene(anchorPane);
 
         Stage stage = (Stage) changeRoot.getScene().getWindow();

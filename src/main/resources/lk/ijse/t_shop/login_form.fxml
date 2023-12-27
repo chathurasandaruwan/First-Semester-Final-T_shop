@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootLogIn" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.t_shop.controller.loggingFromController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="900.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@assests/icon/logginpage.jpg" />
+         </image>
+      </ImageView>
+      <Pane layoutX="460.0" opacity="0.77" prefHeight="600.0" prefWidth="440.0" style="-fx-background-color: #C0C0C0;">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <JFXTextField fx:id="textName" layoutX="72.0" layoutY="179.0" prefHeight="26.0" prefWidth="320.0" promptText="User name">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font></JFXTextField>
+            <JFXPasswordField fx:id="textPassword" layoutX="72.0" layoutY="265.0" onAction="#textPasswordOnAction" prefHeight="26.0" prefWidth="320.0" promptText="Password">
+               <font>
+                  <Font name="System Bold Italic" size="15.0" />
+               </font></JFXPasswordField>
+            <JFXButton fx:id="btnSingIn" layoutX="72.0" layoutY="357.0" onAction="#btnSingInOnAction" prefHeight="37.0" prefWidth="320.0" style="-fx-background-color: #FF5733; -fx-background-radius: 12;" text="LOGIN" textFill="#e8dddd">
+               <font>
+                  <Font name="System Bold Italic" size="17.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
+            <Label layoutX="148.0" layoutY="59.0" text="Sing in">
+               <font>
+                  <Font name="System Bold Italic" size="37.0" />
+               </font>
+            </Label>
+            <Label layoutX="94.0" layoutY="502.0" prefHeight="16.0" prefWidth="276.0" text="By clicking on &quot;Sing in now&quot; you agree to" />
+            <Line endX="34.0" endY="1.0" layoutX="170.0" layoutY="541.0" startX="-54.0" startY="1.0" />
+            <Label layoutX="116.0" layoutY="526.0" prefHeight="16.0" prefWidth="100.0" text="Privacy Policy" />
+            <Line endX="15.0" endY="-1.0" layoutX="317.0" layoutY="543.0" startX="-100.0" />
+            <Label layoutX="220.0" layoutY="526.0" prefHeight="16.0" prefWidth="112.0" text="Terms of Service" />
+            <ToggleButton fx:id="btnToggle" layoutX="389.0" layoutY="269.0" mnemonicParsing="false" onAction="#btnToggleOnAction" opacity="0.63" prefHeight="30.0" prefWidth="51.0" text="SHOW">
+               <font>
+                  <Font size="10.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></ToggleButton>
+            <JFXButton layoutX="258.0" layoutY="394.0" onAction="#btnForgetPasswordOnAction" text="Forgot Password ?">
+               <font>
+                  <Font name="FreeSerif" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></JFXButton>
+         </children>
+      </Pane>
+      <Label layoutX="95.0" layoutY="85.0" text="Welcome" textFill="#171616">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Label>
+      <Label layoutX="103.0" layoutY="165.0" text="Back" textFill="#171616">
+         <font>
+            <Font name="System Bold" size="50.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

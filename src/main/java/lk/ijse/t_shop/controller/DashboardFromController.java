@@ -6,12 +6,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.DashboardBO;
+import lk.ijse.t_shop.bo.custom.impl.DashboardBOImpl;
+import lk.ijse.t_shop.dao.custom.CustomerDAO;
+import lk.ijse.t_shop.dao.custom.OrderDAO;
+import lk.ijse.t_shop.dao.custom.RecordDAO;
+import lk.ijse.t_shop.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.OrderDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.RecordDAOImpl;
 import lk.ijse.t_shop.db.DbConnection;
-import lk.ijse.t_shop.model.CustomerModel;
-import lk.ijse.t_shop.model.OrderModel;
-import lk.ijse.t_shop.model.RecordModel;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
@@ -42,17 +47,13 @@ public class DashboardFromController {
 
     @FXML
     private Label lableItemOrderPres;
-
-    private OrderModel orderModel = new OrderModel();
-
-    private CustomerModel customerModel = new CustomerModel();
-    private RecordModel recordModel = new RecordModel();
+    DashboardBO dashboardBO = (DashboardBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.DASHBOARD);
     static DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
 
     @FXML
     private Label lableDate;
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         setDate();
         setTime();
         addValuesPieChart();
@@ -61,11 +62,11 @@ public class DashboardFromController {
 
     }
 
-    public void addValuesPieChart() throws SQLException {
-        String presentId = orderModel.genarateNextId();
+    public void addValuesPieChart() throws SQLException, ClassNotFoundException {
+        String presentId = dashboardBO.generateNextOrderId();
         int OrderCount = splitOrderId(presentId);
 
-        String PresentRecordId = recordModel.genarateNextId();
+        String PresentRecordId = dashboardBO.generateNextRecordId();
         int RecCount = splitRecId(PresentRecordId);
 
         int itemCount = OrderCount-RecCount;
@@ -85,10 +86,6 @@ public class DashboardFromController {
         pieChart.getData().get(0).getNode().setStyle("-fx-pie-color:  #33d1ff;"); // Red
         pieChart.getData().get(1).getNode().setStyle("-fx-pie-color:  #3985f9;"); // Blue
 
-
-
-       /* pieChart.getData().add(new PieChart.Data("Category 1", 30));
-        pieChart.getData().add(new PieChart.Data("Category 3", 70));*/
     }
     public double setItemPres(int OrderCount,int itemCount){
          return (((double) itemCount /OrderCount)*100);
@@ -110,7 +107,7 @@ public class DashboardFromController {
     }
 
     public void btnPrintOrderHisOnAction(ActionEvent event) throws SQLException, JRException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/report/orderInfo2.jrxml");
+        InputStream resourceAsStream = getClass().getResourceAsStream("/lk/ijse/t_shop/assests/report/orderInfo2.jrxml");
         JasperDesign load = JRXmlLoader.load(resourceAsStream);
         JasperReport jasperReport = JasperCompileManager.compileReport(load);
 
@@ -126,13 +123,13 @@ public class DashboardFromController {
     public void setDate() {
         lableDate.setText(String.valueOf(LocalDate.now()));
     }
-    public void setOrderCount() throws SQLException {
-        String presentId = orderModel.genarateNextId();
+    public void setOrderCount() throws SQLException, ClassNotFoundException {
+        String presentId = dashboardBO.generateNextOrderId();
         int count = splitOrderId(presentId);
         lablNumOfOrder.setText(String.valueOf(count));
     }
-    public  void setCustCount() throws SQLException {
-        String presentId = customerModel.genarateCustId();
+    public  void setCustCount() throws SQLException, ClassNotFoundException {
+        String presentId = dashboardBO.generateNextCustomerId();
         int count = splitCustId(presentId);
         lablNumOfCust.setText(String.valueOf(count));
     }
@@ -168,7 +165,7 @@ public class DashboardFromController {
     }
     @FXML
     void btnPrintRecOrderHisOnAction(ActionEvent event) throws JRException, SQLException {
-        InputStream resourceAsStream = getClass().getResourceAsStream("/report/recordOrderHis.jrxml");
+        InputStream resourceAsStream = getClass().getResourceAsStream("/lk/ijse/t_shop/assests/report/recordOrderHis.jrxml");
         JasperDesign load = JRXmlLoader.load(resourceAsStream);
         JasperReport jasperReport = JasperCompileManager.compileReport(load);
 

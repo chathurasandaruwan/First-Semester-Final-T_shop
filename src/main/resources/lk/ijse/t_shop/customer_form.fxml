@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="870.0" prefWidth="1270.0" style="-fx-background-color: #DCDEE2; -fx-background-radius: 25;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.t_shop.controller.CustomerFromController">
+   <children>
+      <Pane layoutX="5.0" layoutY="62.0" prefHeight="368.0" prefWidth="1254.0" style="-fx-background-color: #cococo; -fx-background-radius: 25;">
+         <children>
+            <TableView fx:id="tblCust" layoutX="2.0" opacity="0.79" prefHeight="356.0" prefWidth="1246.0" style="-fx-background-radius: 25;">
+              <columns>
+                <TableColumn fx:id="columnId" prefWidth="162.0" style="background: #fff;" text="custId" />
+                <TableColumn fx:id="columnName" minWidth="0.0" prefWidth="210.0" text="name" />
+                  <TableColumn fx:id="columnAdd" minWidth="0.0" prefWidth="346.0" text="address" />
+                  <TableColumn fx:id="columntel" minWidth="0.0" prefWidth="527.0" text="contacNo" />
+              </columns>
+            </TableView>
+         </children>
+      </Pane>
+      <AnchorPane layoutX="14.0" layoutY="439.0" prefHeight="420.0" prefWidth="1246.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 25;">
+         <children>
+            <Button layoutX="889.0" layoutY="276.0" mnemonicParsing="false" onAction="#btnUpdateOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #139E20; -fx-background-radius: 7;" text="Update" textFill="WHITE" />
+            <Button layoutX="1018.0" layoutY="276.0" mnemonicParsing="false" onAction="#btnSaveOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #134E9E; -fx-background-radius: 7;" text="Save" textFill="WHITE" />
+            <Button layoutX="713.0" layoutY="276.0" mnemonicParsing="false" onAction="#btnDeleteOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #C70039; -fx-background-radius: 7;" text="Delete" textFill="WHITE" />
+            <Button layoutX="583.0" layoutY="276.0" mnemonicParsing="false" onAction="#btnClearOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #9E1390; -fx-background-radius: 7;" text="Clear" textFill="WHITE" />
+            <Label layoutX="403.0" layoutY="74.0" text="Name :">
+               <font>
+                  <Font name="System Italic" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="631.0" layoutY="145.0" text="Address :">
+               <font>
+                  <Font name="System Italic" size="21.0" />
+               </font>
+            </Label>
+            <Label layoutX="107.0" layoutY="143.0" text="Contact no :">
+               <font>
+                  <Font name="System Italic" size="21.0" />
+               </font>
+            </Label>
+            <TextField fx:id="texTel" layoutX="244.0" layoutY="141.0" prefHeight="30.0" prefWidth="223.0" style="-fx-background-radius: 25;">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+            <TextField fx:id="textName" layoutX="507.0" layoutY="70.0" prefHeight="30.0" prefWidth="223.0" style="-fx-background-radius: 25;">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+            <TextField fx:id="textAddress" layoutX="746.0" layoutY="141.0" prefHeight="30.0" prefWidth="223.0" style="-fx-background-radius: 25;">
+               <font>
+                  <Font size="18.0" />
+               </font></TextField>
+         </children>
+      </AnchorPane>
+      <Pane layoutX="419.0" layoutY="14.0" prefHeight="30.0" prefWidth="437.0" style="-fx-background-color: white; -fx-background-radius: 30;">
+         <children>
+            <TextField fx:id="textSearch" layoutX="33.0" layoutY="1.0" onAction="#textSearchOnAction" prefHeight="26.0" prefWidth="351.0" promptText="Search......" style="-fx-background-radius: 30; -fx-background-color: white;" />
+            <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="14.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@assests/icon/search.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+      <Label layoutX="14.0" layoutY="16.0" prefHeight="25.0" prefWidth="145.0" text="Customer ID :">
+         <font>
+            <Font name="System Italic" size="21.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblcustomerId" layoutX="159.0" layoutY="13.0" prefHeight="33.0" prefWidth="114.0">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

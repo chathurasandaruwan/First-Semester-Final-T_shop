@@ -8,13 +8,22 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.recordDto;
-import lk.ijse.t_shop.model.CustomerModel;
-import lk.ijse.t_shop.model.OrderModel;
-import lk.ijse.t_shop.model.RecordModel;
-import lk.ijse.t_shop.model.SaveRecordModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.RecordBO;
+import lk.ijse.t_shop.bo.custom.impl.RecordBOImpl;
+import lk.ijse.t_shop.dao.custom.CustomerDAO;
+import lk.ijse.t_shop.dao.custom.OrderDAO;
+import lk.ijse.t_shop.dao.custom.RecordDAO;
+import lk.ijse.t_shop.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.OrderDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.RecordDAOImpl;
+import lk.ijse.t_shop.db.DbConnection;
+import lk.ijse.t_shop.dto.CustomerDto;
+import lk.ijse.t_shop.dto.OrderDto;
+import lk.ijse.t_shop.dto.RecordDto;
+import lk.ijse.t_shop.view.tdm.RecordTm;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,7 +39,7 @@ public class RecordFromController {
     private JFXTextField textRecordId;
 
     @FXML
-    private TableView<recordDto> tableRecord;
+    private TableView<RecordTm> tableRecord;
 
     @FXML
     private TableColumn<?, ?> columnRecordID;
@@ -157,18 +166,15 @@ public class RecordFromController {
 
     @FXML
     private TextField textSearch;
-    private OrderModel orderModel=new OrderModel();
-    private RecordModel model = new RecordModel();
-    private SaveRecordModel saveRecordModel = new SaveRecordModel();
-    private CustomerModel customerModel= new CustomerModel();
 
     @FXML
     private TableColumn<?, ?> columnPrice;
 
     @FXML
     private Label lableOrderId;
+    RecordBO recordBO = (RecordBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.RECORD);
 
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, ClassNotFoundException {
         genarateNextOrderId();
         genarateNextRecId();
         clearFiled();
@@ -209,35 +215,41 @@ public class RecordFromController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<customerDto> idList = customerModel.getAllCustomer();
+            List<CustomerDto> idList = recordBO.getAllCustomer();
 
-            for (customerDto dto : idList) {
+            for (CustomerDto dto : idList) {
                 obList.add(dto.getCustId());
             }
 
             combCust.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     private void genarateNextOrderId(){
         try {
-            String id = orderModel.genarateNextId();
+            String id = recordBO.generateNextOrderId();
             lableOrderId.setText(id);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     private void genarateNextRecId(){
         try {
-            String id = model.genarateNextId();
+            String id = recordBO.generateNextRecordId();
             textRecordId.setText(id);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
-    public void clearFiled() throws SQLException {
-        textRecordId.setText(model.genarateNextId());
+    public void clearFiled() throws SQLException, ClassNotFoundException {
+        textRecordId.setText(recordBO.generateNextRecordId());
         textType.setText("");
         textCrotchDep.setText("00");
         textRice.setText("00");
@@ -258,19 +270,19 @@ public class RecordFromController {
         textSleeveOp.setText("00");
         textColler.setText("00");
         textSearch.setText("");
-        lableOrderId.setText(orderModel.genarateNextId());
+        lableOrderId.setText(recordBO.generateNextOrderId());
         textPayment.setText("");
         combCust.setValue("");
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
             clearFiled();
     }
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = textRecordId.getText();
         try {
-            boolean isDelete = model.deleteRecord(id);
+            boolean isDelete = recordBO.deleteRecord(id);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -279,6 +291,8 @@ public class RecordFromController {
                 new Alert(Alert.AlertType.ERROR, "Record not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -310,10 +324,10 @@ public class RecordFromController {
           String price = textPayment.getText();
           LocalDate date = LocalDate.parse(lableDate.getText());
           String customerId = combCust.getValue();
-          var dto = new recordDto(id, type, Cd, rice, legOpen, kneeCrium, thighCirum, outSleam, inseamL, hiperC, waistC, Cuffc, neckC, chestC, shirtL, shoulderW, sleevL, bicepC, sleevO, coller, orderId, price, customerId);
+          var dto = new RecordDto(id, type, Cd, rice, legOpen, kneeCrium, thighCirum, outSleam, inseamL, hiperC, waistC, Cuffc, neckC, chestC, shirtL, shoulderW, sleevL, bicepC, sleevO, coller, orderId, price, customerId);
 
           try {
-              boolean isSaved = saveRecordModel.saveRecord(dto, date);
+              boolean isSaved = recordBO.placeRecord(dto, date);
               if (isSaved) {
                   new Alert(Alert.AlertType.INFORMATION, "Record Saved Successful").show();
                   clearFiled();
@@ -321,6 +335,8 @@ public class RecordFromController {
               }
           } catch (SQLException e) {
               new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+              throw new RuntimeException(e);
+          } catch (ClassNotFoundException e) {
               throw new RuntimeException(e);
           }
       }
@@ -469,10 +485,10 @@ public class RecordFromController {
         String price = textPayment.getText();
       //  LocalDate date = LocalDate.parse(lableDate.getText());
         String customerId = combCust.getValue();
-        var dto = new recordDto(id,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,customerId);
+        var dto = new RecordDto(id,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,customerId);
         if (isCorrect) {
             try {
-                boolean isUpdate = model.updateRecord(dto);
+                boolean isUpdate = recordBO.updateRecord(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -482,6 +498,8 @@ public class RecordFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -490,7 +508,7 @@ public class RecordFromController {
     void textSearchOnAction(ActionEvent event) {
         String id=textSearch.getText();
         try {
-            recordDto dto = model.searchRecord(id);
+            RecordDto dto = recordBO.searchRecord(id);
             if (dto!= null){
                 textRecordId.setText(dto.getRecordId());
                 textType.setText(dto.getType());
@@ -520,15 +538,17 @@ public class RecordFromController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     void loadAllRecord(){
-        ObservableList<recordDto> obList = FXCollections.observableArrayList();
+        ObservableList<RecordTm> obList = FXCollections.observableArrayList();
         try {
-            List<recordDto> dtoList = model.getAllRecord();
-            for (recordDto dto : dtoList) {
+            List<RecordDto> dtoList = recordBO.getAllRecord();
+            for (RecordDto dto : dtoList) {
                 obList.add(
-                        new recordDto(
+                        new RecordTm(
                                 dto.getRecordId(),
                                 dto.getType(),
                                 dto.getCrotchDep(),
@@ -557,6 +577,8 @@ public class RecordFromController {
             }
             tableRecord.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

@@ -10,11 +10,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.itemDto;
-import lk.ijse.t_shop.dto.raw_materialDto;
-import lk.ijse.t_shop.dto.supplierDto;
-import lk.ijse.t_shop.dto.tm.raw_materialTm;
-import lk.ijse.t_shop.model.RawMaterialModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.RawMaterialBO;
+import lk.ijse.t_shop.bo.custom.impl.RawMaterialBOImpl;
+import lk.ijse.t_shop.dao.custom.RawMaterialDAO;
+import lk.ijse.t_shop.dao.custom.impl.RawMaterialDAOImpl;
+import lk.ijse.t_shop.dto.Raw_materialDto;
+import lk.ijse.t_shop.view.tdm.raw_materialTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -46,7 +48,7 @@ public class RawMaterialFromController {
     @FXML
     private TableColumn<?, ?> columnQty;
 
-    private RawMaterialModel model=new RawMaterialModel();
+    RawMaterialBO rawMaterialBO = (RawMaterialBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.RAW_MATERIAL);
     public void initialize(){
         genaratenextId();
         valuesFactory();
@@ -57,23 +59,25 @@ public class RawMaterialFromController {
         columnName.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnQty.setCellValueFactory(new PropertyValueFactory<>("quntity"));
     }
-    public void clearFiled() throws SQLException {
-        textId.setText(model.genarateNextId());
+    public void clearFiled() throws SQLException, ClassNotFoundException {
+        textId.setText(rawMaterialBO.generateNextRawMaterialId());
         textName.setText("");
         textQty.setText("");
         textSearch.setText("");
     }
     public void genaratenextId(){
         try {
-            String rawId = model.genarateNextId();
+            String rawId = rawMaterialBO.generateNextRawMaterialId();
             textId.setText(rawId);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         clearFiled();
     }
 
@@ -81,7 +85,7 @@ public class RawMaterialFromController {
     void btnDeleteOnAction(ActionEvent event) {
         String id = textId.getText();
         try {
-            boolean isDelete = model.deleteMaterial(id);
+            boolean isDelete = rawMaterialBO.deleteRawMaterial(id);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -90,6 +94,8 @@ public class RawMaterialFromController {
                 new Alert(Alert.AlertType.ERROR,"Material not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -100,11 +106,11 @@ public class RawMaterialFromController {
         String name = textName.getText();
         int qty = Integer.parseInt(textQty.getText());
 
-        var dto = new raw_materialDto(id,name,qty);
+        var dto = new Raw_materialDto(id,name,qty);
 
         if (isCorrect) {
             try {
-                boolean isSaved = model.saveRawM(dto);
+                boolean isSaved = rawMaterialBO.saveRawMaterial(dto);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Material Saved Successful").show();
                     clearFiled();
@@ -112,6 +118,8 @@ public class RawMaterialFromController {
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -140,9 +148,9 @@ public class RawMaterialFromController {
         ObservableList<raw_materialTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<raw_materialDto> dtoList = model.getAllMaterial();
+            List<Raw_materialDto> dtoList = rawMaterialBO.getAllRawMaterial();
 
-            for (raw_materialDto dto : dtoList) {
+            for (Raw_materialDto dto : dtoList) {
                 obList.add(
                         new raw_materialTm(
                                 dto.getRawID(),
@@ -155,6 +163,8 @@ public class RawMaterialFromController {
             tableRawM.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -165,10 +175,10 @@ public class RawMaterialFromController {
         String name = textName.getText();
         int qty = Integer.parseInt(textQty.getText());
 
-        var dto = new raw_materialDto(id,name,qty);
+        var dto = new Raw_materialDto(id,name,qty);
         if (isCorrect) {
             try {
-                boolean isUpdate = model.updateMaterial(dto);
+                boolean isUpdate = rawMaterialBO.updateRawMaterial(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -178,6 +188,8 @@ public class RawMaterialFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -186,7 +198,7 @@ public class RawMaterialFromController {
     void textSearchOnAction(ActionEvent event) {
         String id=textSearch.getText();
         try {
-            raw_materialDto dto = model.searchMaterial(id);
+            Raw_materialDto dto = rawMaterialBO.searchRawMaterial(id);
             if (dto!= null){
                 textId.setText(dto.getRawID());
                 textName.setText(dto.getName());
@@ -196,6 +208,8 @@ public class RawMaterialFromController {
                 new Alert(Alert.AlertType.ERROR,"Material not found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

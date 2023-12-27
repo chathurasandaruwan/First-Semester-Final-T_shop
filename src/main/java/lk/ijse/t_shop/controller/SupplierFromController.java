@@ -9,11 +9,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.supplierDto;
-import lk.ijse.t_shop.dto.tailorDto;
-import lk.ijse.t_shop.dto.tm.supplierTm;
-import lk.ijse.t_shop.model.SupplierModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.SupplierBO;
+import lk.ijse.t_shop.bo.custom.impl.SupplierBOImpl;
+import lk.ijse.t_shop.dao.custom.SupplierDAO;
+import lk.ijse.t_shop.dao.custom.impl.SupplierDAOImpl;
+import lk.ijse.t_shop.dto.SupplierDto;
+import lk.ijse.t_shop.view.tdm.supplierTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -49,7 +51,7 @@ public class SupplierFromController {
 
     @FXML
     private TableColumn<?, ?> ColumnContactNo;
-    private SupplierModel model= new SupplierModel();
+    SupplierBO supplierBO = (SupplierBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.SUPPLIER);
    public void initialize(){
        genarateNextSupId();
        SelectAllSup();
@@ -63,22 +65,24 @@ public class SupplierFromController {
     }
     public void genarateNextSupId(){
        try {
-           String supId= model.genarateSupId();
+           String supId= supplierBO.generateNextSupplierId();
            textSupId.setText(supId);
        } catch (SQLException e) {
+           throw new RuntimeException(e);
+       } catch (ClassNotFoundException e) {
            throw new RuntimeException(e);
        }
 
     }
-    public void clearFiled() throws SQLException {
-        textSupId.setText(model.genarateSupId());
+    public void clearFiled() throws SQLException, ClassNotFoundException {
+        textSupId.setText(supplierBO.generateNextSupplierId());
         textName.setText("");
         textDesc.setText("");
         textContactNo.setText("");
         textsearch.setText("");
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         clearFiled();
     }
 
@@ -90,9 +94,9 @@ public class SupplierFromController {
         String address = textDesc.getText();
         String tel = textContactNo.getText();
         if (isCorrect) {
-            var dto = new supplierDto(id, name, address, tel);
+            var dto = new SupplierDto(id, name, address, tel);
             try {
-                boolean isUpdate = model.updateSupplier(dto);
+                boolean isUpdate = supplierBO.updateSupplier(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -102,6 +106,8 @@ public class SupplierFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -110,7 +116,7 @@ public class SupplierFromController {
     void btnDeleteOnAction(ActionEvent event) {
         String id = textSupId.getText();
         try {
-            boolean isDelete = model.deleteSupplier(id);
+            boolean isDelete = supplierBO.deleteSupplier(id);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -119,6 +125,8 @@ public class SupplierFromController {
                 new Alert(Alert.AlertType.ERROR,"Supplier not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -153,10 +161,10 @@ public class SupplierFromController {
         String name = textName.getText();
         String description = textDesc.getText();
         String contacNo = textContactNo.getText();
-        var dto = new supplierDto(supId,name,description,contacNo);
+        var dto = new SupplierDto(supId,name,description,contacNo);
         if (isCorrect) {
             try {
-                boolean isSaved = model.saveSupllier(dto);
+                boolean isSaved = supplierBO.saveSupplier(dto);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Supplier Saved Successful").show();
                     clearFiled();
@@ -165,6 +173,8 @@ public class SupplierFromController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -172,9 +182,9 @@ public class SupplierFromController {
         ObservableList<supplierTm> obList = FXCollections.observableArrayList();
 
         try {
-            List <supplierDto> dtoList = model.getAllSup();
+            List <SupplierDto> dtoList = supplierBO.getAllSupplier();
 
-            for (supplierDto dto : dtoList) {
+            for (SupplierDto dto : dtoList) {
                 obList.add(
                         new supplierTm(
                                 dto.getSupId(),
@@ -188,6 +198,8 @@ public class SupplierFromController {
             tableSupplier.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
 
     }
@@ -195,7 +207,7 @@ public class SupplierFromController {
     void textSerchOnAction(ActionEvent event) {
        String supId=textsearch.getText();
        try {
-           supplierDto dto = model.searchCustomer(supId);
+           SupplierDto dto = supplierBO.searchSupplier(supId);
            if (dto!=null){
                textSupId.setText(dto.getSupId());
                textName.setText(dto.getName());
@@ -205,6 +217,8 @@ public class SupplierFromController {
                new Alert(Alert.AlertType.ERROR,"Supplier Not Found").show();
            }
        } catch (SQLException e) {
+           throw new RuntimeException(e);
+       } catch (ClassNotFoundException e) {
            throw new RuntimeException(e);
        }
     }

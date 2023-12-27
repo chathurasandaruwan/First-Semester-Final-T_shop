@@ -18,7 +18,7 @@ public class AppInitializer extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/view/loading_form.fxml"));
+        AnchorPane rootNode = FXMLLoader.load(this.getClass().getResource("/lk/ijse/t_shop/loading_form.fxml"));
         Scene scene = new Scene(rootNode);
         stage.setScene(scene);
         stage.setTitle("LOADING .............");
@@ -40,7 +40,7 @@ public class AppInitializer extends Application {
     }
 
     private void closeApplication(AnchorPane rootNode,Stage stage) throws IOException {
-        rootNode = FXMLLoader.load(this.getClass().getResource("/view/login_form.fxml"));
+        rootNode = FXMLLoader.load(this.getClass().getResource("/lk/ijse/t_shop/login_form.fxml"));
         Scene scene = new Scene(rootNode);
         stage.setScene(scene);
         stage.setTitle("Logging Page");

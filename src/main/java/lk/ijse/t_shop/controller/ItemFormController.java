@@ -8,10 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.itemDto;
-import lk.ijse.t_shop.dto.tm.itemTm;
-import lk.ijse.t_shop.model.ItemModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.ItemBO;
+import lk.ijse.t_shop.bo.custom.impl.ItemBOImpl;
+import lk.ijse.t_shop.dao.custom.ItemDAO;
+import lk.ijse.t_shop.dao.custom.impl.ItemDAOImpl;
+import lk.ijse.t_shop.dto.ItemDto;
+import lk.ijse.t_shop.view.tdm.itemTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -64,8 +67,7 @@ public class ItemFormController {
     @FXML
     private TableColumn<?, ?> columnSize;
 
-
-    private ItemModel model=new ItemModel();
+    ItemBO itemBO = (ItemBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ITEM);
 
     public void initialize(){
         genarateNextItemCode();
@@ -101,8 +103,8 @@ public class ItemFormController {
         columnDiscount.setCellValueFactory(new PropertyValueFactory<>("discountPercentage"));
         columnSize.setCellValueFactory(new PropertyValueFactory<>("size"));
     }
-    public void clearFiled() throws SQLException {
-        textItemCode.setText(model.genarateItemCode());
+    public void clearFiled() throws SQLException, ClassNotFoundException {
+        textItemCode.setText(itemBO.generateNextItemCode());
         textPrice.setText("");
         comType.setValue("");
         textColor.setText("");
@@ -113,14 +115,16 @@ public class ItemFormController {
     }
     public void genarateNextItemCode(){
         try {
-            String itemCode= model.genarateItemCode();
+            String itemCode= itemBO.generateNextItemCode();
             textItemCode.setText(itemCode);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         clearFiled();
     }
 
@@ -128,7 +132,7 @@ public class ItemFormController {
     void btnDeleteOnAction(ActionEvent event) {
         String code = textItemCode.getText();
         try {
-            boolean isDelete = model.deleteItem(code);
+            boolean isDelete = itemBO.deleteItem(code);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -137,6 +141,8 @@ public class ItemFormController {
                 new Alert(Alert.AlertType.ERROR,"Item not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -151,10 +157,10 @@ public class ItemFormController {
         double discountPercentage = Double.parseDouble(textDiscount.getText());
         String size = comSize.getValue();
         String color = textColor.getText();
-        var dto = new itemDto(itemCode,type,price,quntity,discountPercentage,size,color);
+        var dto = new ItemDto(itemCode,type,price,quntity,discountPercentage,size,color);
         if (isCorrect) {
             try {
-                boolean isSaved = model.saveItem(dto);
+                boolean isSaved = itemBO.saveItem(dto);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Item Saved Successful").show();
                     clearFiled();
@@ -162,6 +168,8 @@ public class ItemFormController {
                 }
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -198,9 +206,9 @@ public class ItemFormController {
         ObservableList<itemTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<itemDto> dtoList = model.getAllItem();
+            List<ItemDto> dtoList = itemBO.getAllItem();
 
-            for (itemDto dto : dtoList) {
+            for (ItemDto dto : dtoList) {
                 obList.add(
                         new itemTm(
                                 dto.getItemCode(),
@@ -217,6 +225,8 @@ public class ItemFormController {
             tablItem.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -231,10 +241,10 @@ public class ItemFormController {
         String size = comSize.getValue();
         String color = textColor.getText();
 
-        var dto = new itemDto(code,type,price,qty,disc,size,color);
+        var dto = new ItemDto(code,type,price,qty,disc,size,color);
         if (isCorrect) {
             try {
-                boolean isUpdate = model.updateItem(dto);
+                boolean isUpdate = itemBO.updateItem(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -244,6 +254,8 @@ public class ItemFormController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -252,7 +264,7 @@ public class ItemFormController {
     void textSearchOnAction(ActionEvent event) {
         String code=textSearch.getText();
         try {
-            itemDto dto = model.searchItem(code);
+            ItemDto dto = itemBO.searchItem(code);
             if (dto!= null){
                 textItemCode.setText(dto.getItemCode());
                 comType.setValue(dto.getType());
@@ -265,6 +277,8 @@ public class ItemFormController {
                 new Alert(Alert.AlertType.ERROR,"Item not found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

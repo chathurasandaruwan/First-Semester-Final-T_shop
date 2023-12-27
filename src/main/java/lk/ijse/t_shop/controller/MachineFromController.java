@@ -6,11 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.machineDto;
-import lk.ijse.t_shop.dto.raw_materialDto;
-import lk.ijse.t_shop.dto.tailorDto;
-import lk.ijse.t_shop.model.MachineModel;
-import lk.ijse.t_shop.model.TailorModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.MachineBO;
+import lk.ijse.t_shop.bo.custom.impl.MachineBOImpl;
+import lk.ijse.t_shop.dto.MachineDto;
+import lk.ijse.t_shop.dto.TailorDto;
+import lk.ijse.t_shop.view.tdm.MachineTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -34,7 +35,7 @@ public class MachineFromController {
     private TextField textSearch;
 
     @FXML
-    private TableView<machineDto> tableMachine;
+    private TableView<MachineTm> tableMachine;
 
     @FXML
     private TableColumn<?, ?> columnId;
@@ -47,9 +48,7 @@ public class MachineFromController {
 
     @FXML
     private TableColumn<?, ?> columnTId;
-
-    private TailorModel tailorModel=new TailorModel();
-    private MachineModel model=new MachineModel();
+    MachineBO machineBO = (MachineBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.MACHINE);
 
     public void initialize(){
         loadTailorIds();
@@ -60,9 +59,11 @@ public class MachineFromController {
 
     private void genarateNextMachineId() {
         try {
-            String id = model.genarateNextId();
+            String id = machineBO.generateNextMachineId();
             textCode.setText(id);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -78,18 +79,20 @@ public class MachineFromController {
     private void loadTailorIds() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<tailorDto> idList = tailorModel.getAllTailor();
+            List<TailorDto> idList = machineBO.getAllTailor();
 
-            for (tailorDto dto : idList) {
+            for (TailorDto dto : idList) {
                 obList.add(dto.getTailerId());
             }
             comTailerId.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
             clearFiled();
     }
 
@@ -97,7 +100,7 @@ public class MachineFromController {
     void btnDeleteOnAction(ActionEvent event) {
             String code = textCode.getText();
         try {
-            boolean isDelete = model.deleteMachine(code);
+            boolean isDelete = machineBO.deleteMachine(code);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -106,6 +109,8 @@ public class MachineFromController {
                 new Alert(Alert.AlertType.ERROR,"Machine not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -116,11 +121,11 @@ public class MachineFromController {
         String name = textName.getText();
         String type =textType.getText();
         String tailerId = comTailerId.getValue();
-        var dto =new machineDto(code,name,type,tailerId);
+        var dto =new MachineDto(code,name,type,tailerId);
         boolean isCorrect = validateInputs(dto);
         if (isCorrect) {
             try {
-                boolean isSaved = model.saveMachine(dto);
+                boolean isSaved = machineBO.saveMachine(dto);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Machine Saved Successful").show();
                     clearFiled();
@@ -129,10 +134,12 @@ public class MachineFromController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
-    private boolean validateInputs(machineDto dto) {
+    private boolean validateInputs(MachineDto dto) {
         boolean matches = Pattern.compile("[M][0-9]{3,}").matcher(dto.getMachineCode()).matches();
         if (!matches){
             new Alert(Alert.AlertType.ERROR,"Invalid Machine Id !!").show();
@@ -151,14 +158,14 @@ public class MachineFromController {
         return true;
     }
     public void selectAllMachine() {
-        ObservableList<machineDto> obList = FXCollections.observableArrayList();
+        ObservableList<MachineTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<machineDto> dtoList = model.getAllMachine();
+            List<MachineDto> dtoList = machineBO.getAllMachine();
 
-            for (machineDto dto : dtoList) {
+            for (MachineDto dto : dtoList) {
                 obList.add(
-                        new machineDto(
+                        new MachineTm(
                                 dto.getMachineCode(),
                                 dto.getName(),
                                 dto.getMachineType(),
@@ -170,11 +177,13 @@ public class MachineFromController {
             tableMachine.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void clearFiled() throws SQLException {
-        textCode.setText(model.genarateNextId());
+    private void clearFiled() throws SQLException, ClassNotFoundException {
+        textCode.setText(machineBO.generateNextMachineId());
         textName.setText("");
         textType.setText("");
         comTailerId.setValue("");
@@ -188,11 +197,11 @@ public class MachineFromController {
        String type = textType.getText();
         String tId = comTailerId.getValue();
 
-        var dto = new machineDto(code,name,type,tId);
+        var dto = new MachineDto(code,name,type,tId);
         boolean isCorrect = validateInputs(dto);
         if (isCorrect) {
             try {
-                boolean isUpdate = model.updateMachine(dto);
+                boolean isUpdate = machineBO.updateMachine(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -202,6 +211,8 @@ public class MachineFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -210,7 +221,7 @@ public class MachineFromController {
     void textSearchOnAction(ActionEvent event) {
             String code = textSearch.getText();
         try {
-            machineDto dto = model.searchMachine(code);
+            MachineDto dto = machineBO.searchMachine(code);
             if (dto!= null){
                 textCode.setText(dto.getMachineCode());
                 textName.setText(dto.getName());
@@ -221,6 +232,8 @@ public class MachineFromController {
                 new Alert(Alert.AlertType.ERROR,"Machine not found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

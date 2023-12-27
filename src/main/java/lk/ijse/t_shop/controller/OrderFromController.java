@@ -14,16 +14,28 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.ItemBO;
+import lk.ijse.t_shop.bo.custom.OrderBO;
+import lk.ijse.t_shop.bo.custom.impl.ItemBOImpl;
+import lk.ijse.t_shop.bo.custom.impl.OrderBOImpl;
+import lk.ijse.t_shop.dao.custom.CustomerDAO;
+import lk.ijse.t_shop.dao.custom.ItemDAO;
+import lk.ijse.t_shop.dao.custom.OrderDAO;
+import lk.ijse.t_shop.dao.custom.OrderDetailDAO;
+import lk.ijse.t_shop.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.ItemDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.OrderDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.OrderDetailDAOImpl;
+import lk.ijse.t_shop.db.DbConnection;
+import lk.ijse.t_shop.dto.OrderDto;
 import lk.ijse.t_shop.dto.PlaceOrderDto;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.itemDto;
-import lk.ijse.t_shop.dto.tm.CartTm;
-import lk.ijse.t_shop.model.CustomerModel;
-import lk.ijse.t_shop.model.ItemModel;
-import lk.ijse.t_shop.model.OrderModel;
-import lk.ijse.t_shop.model.PlaceOrderModel;
+import lk.ijse.t_shop.dto.CustomerDto;
+import lk.ijse.t_shop.dto.ItemDto;
+import lk.ijse.t_shop.view.tdm.CartTm;
 
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -76,12 +88,9 @@ public class OrderFromController {
     @FXML
     private Label lablePrice;
 
-    private OrderModel model=new OrderModel();
-    private ItemModel itemModel=new ItemModel();
-    private CustomerModel customerModel=new CustomerModel();
-    private PlaceOrderModel placeOrderModel = new PlaceOrderModel();
     @FXML
     private AnchorPane root;
+
     @FXML
     private Label lableSize;
 
@@ -105,6 +114,7 @@ public class OrderFromController {
 
     @FXML
     private TextField textQty;
+    OrderBO orderBO = (OrderBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.ORDERS);
     private ObservableList<CartTm> obList = FXCollections.observableArrayList();
 
     public void initialize(){
@@ -124,9 +134,9 @@ public class OrderFromController {
         lablePrice.setText("");
         lableDiscountPre.setText("");
     }
-    public void afterPlaseBtn() throws SQLException {
+    public void afterPlaseBtn() throws SQLException, ClassNotFoundException {
         combCustId.setValue("");
-        lableOrderId.setText(model.genarateNextId());
+        lableOrderId.setText(orderBO.generateNextOrderId());
         lableNetTotal.setText("");
         lableCustName.setText("");
         obList.clear();
@@ -136,9 +146,9 @@ public class OrderFromController {
         colItemCode.setCellValueFactory(new PropertyValueFactory<>("code"));
         colDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
         colQty.setCellValueFactory(new PropertyValueFactory<>("qty"));
-        colPrice.setCellValueFactory(new PropertyValueFactory<>("unitPrice"));
+        colPrice.setCellValueFactory(new PropertyValueFactory<>("Price"));
         colTot.setCellValueFactory(new PropertyValueFactory<>("tot"));
-        colDiscount.setCellValueFactory(new PropertyValueFactory<>("discount"));
+        colDiscount.setCellValueFactory(new PropertyValueFactory<>("discountPercentage"));
         colAction.setCellValueFactory(new PropertyValueFactory<>("btn"));
     }
 
@@ -160,13 +170,15 @@ public class OrderFromController {
     private void loadItemCodes() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<itemDto> idList = itemModel.getAllItem();
+            List<ItemDto> idList = orderBO.getAllItem();
 
-            for (itemDto dto : idList) {
+            for (ItemDto dto : idList) {
                 obList.add(dto.getItemCode());
             }
             combItemCode.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -174,28 +186,32 @@ public class OrderFromController {
         ObservableList<String> obList = FXCollections.observableArrayList();
 
         try {
-            List<customerDto> idList = customerModel.getAllCustomer();
+            List<CustomerDto> idList = orderBO.getAllCustomer();
 
-            for (customerDto dto : idList) {
+            for (CustomerDto dto : idList) {
                 obList.add(dto.getCustId());
             }
 
             combCustId.setItems(obList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     private void genarateNextOrderId(){
         try {
-            String id = model.genarateNextId();
+            String id = orderBO.generateNextOrderId();
             lableOrderId.setText(id);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     @FXML
     void btnAddCustomerOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/customer_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/customer_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
@@ -266,7 +282,7 @@ public class OrderFromController {
         lableNetTotal.setText(String.valueOf(total));
     }
     @FXML
-    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException {
+    void btnPlaceOrderOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String orderId = lableOrderId.getText();
         LocalDate date = LocalDate.parse(lableDate.getText());
         String customerId = combCustId.getValue();
@@ -278,7 +294,7 @@ public class OrderFromController {
         }
         var placeOrderDto = new PlaceOrderDto(orderId, date, customerId, cartTmList);
         try {
-            boolean isSuccess = placeOrderModel.placeOrder(placeOrderDto);
+            boolean isSuccess = orderBO.placeOrder(placeOrderDto);
             if (isSuccess) {
                 new Alert(Alert.AlertType.CONFIRMATION, "Order Success!").show();
             }
@@ -292,10 +308,12 @@ public class OrderFromController {
     void combCustIdOnAction(ActionEvent event) {
         String id = combCustId.getValue();
         try {
-            customerDto customerDto = customerModel.searchCustomer(id);
+            CustomerDto customerDto = orderBO.searchCustomer(id);
             lableCustName.setText(customerDto.getName());
 
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -306,7 +324,7 @@ public class OrderFromController {
 
         textQty.requestFocus();
         try {
-            itemDto dto = itemModel.searchItem(code);
+            ItemDto dto = orderBO.searchItem(code);
             lableDesc.setText(dto.getType());
             lablePrice.setText(String.valueOf(dto.getPrice()));
             lableQuntity.setText(String.valueOf(dto.getQuntity()));
@@ -314,6 +332,8 @@ public class OrderFromController {
             lableSize.setText(dto.getSize());
             lableColor.setText(dto.getColor());
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

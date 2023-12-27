@@ -22,27 +22,27 @@ public class ButtonBarFromController implements Serializable {
     private AnchorPane root;
 
     public void initialize() throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/dashboard_form.fxml"));
         root.getChildren().clear();
         root.getChildren().add(rootNode);
     }
     @FXML
     void btnCustomerOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/customer_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/customer_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnHomeOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/dashboard_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/dashboard_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnItemOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/item_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/item_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
@@ -51,7 +51,7 @@ public class ButtonBarFromController implements Serializable {
     void btnLogOutOnAction(ActionEvent event) throws IOException {
         Optional <ButtonType> type=new Alert(Alert.AlertType.INFORMATION,"Do you want Log Out",NO,YES).showAndWait();
             if(type.orElse(NO)==YES){
-                AnchorPane anchorPane =FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
+                AnchorPane anchorPane =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/login_form.fxml"));
                 Scene scene=new Scene(anchorPane);
 
                 Stage stage=(Stage)root.getScene().getWindow();
@@ -63,42 +63,42 @@ public class ButtonBarFromController implements Serializable {
 
     @FXML
     void btnMachineOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/machine_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/machine_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnOrderOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/order_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/order_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnRawMaterialsOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/raw_material_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/raw_material_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnRecordOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/record_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/record_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnSupplierOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/supplier_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/supplier_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }
 
     @FXML
     void btnTailorOnAction(ActionEvent event) throws IOException {
-        Parent rootNode =FXMLLoader.load(getClass().getResource("/view/tailor_form.fxml"));
+        Parent rootNode =FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/tailor_form.fxml"));
         this.root.getChildren().clear();
         this.root.getChildren().add(rootNode);
     }

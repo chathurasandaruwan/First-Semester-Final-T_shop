@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="870.0" prefWidth="1270.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.t_shop.controller.RecordFromController">
+   <children>
+      <Pane layoutY="-1.0" prefHeight="874.0" prefWidth="1270.0" style="-fx-background-color: DCF1F5; -fx-background-radius: 25;">
+         <children>
+            <Label layoutX="974.0" layoutY="523.0" text="Type:">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="textType" layoutX="1038.0" layoutY="521.0" />
+            <Label layoutX="311.0" layoutY="441.0" text="OutSeamLength:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="69.0" layoutY="440.0" text="CrotchDepth:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="10.0" layoutY="608.0" text="ThighCirumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="1059.0" layoutY="25.0" text="Record ID :">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="textRecordId" layoutX="1181.0" layoutY="21.0" prefHeight="26.0" prefWidth="75.0">
+               <font>
+                  <Font name="System Italic" size="15.0" />
+               </font>
+            </JFXTextField>
+            <Pane layoutX="12.0" layoutY="53.0" prefHeight="376.0" prefWidth="1254.0">
+               <children>
+                  <TableView fx:id="tableRecord" layoutX="3.0" layoutY="8.0" prefHeight="361.0" prefWidth="1248.0" style="-fx-background-radius: 9;">
+                    <columns>
+                      <TableColumn fx:id="columnRecordID" prefWidth="88.0" text="Record ID " />
+                      <TableColumn fx:id="columnType" minWidth="0.0" prefWidth="91.0" text="Type" />
+                        <TableColumn fx:id="columnOrderID" prefWidth="85.0" text="Order ID " />
+                        <TableColumn fx:id="columnCrotchDepth" prefWidth="54.0" text="CrotchDepth" />
+                        <TableColumn fx:id="columnRise" prefWidth="43.0" text="Rise" />
+                        <TableColumn fx:id="columnLegOpening" prefWidth="50.0" text="LegOpening" />
+                        <TableColumn fx:id="columnKneeCirumference" prefWidth="53.0" text="KneeCirumference" />
+                        <TableColumn fx:id="columnThighCirumference" prefWidth="47.0" text="ThighCirumference" />
+                        <TableColumn fx:id="columnInseamLength" prefWidth="43.0" text="InseamLength" />
+                        <TableColumn fx:id="columnOutSeamLength" prefWidth="52.0" text="OutSeamLength" />
+                        <TableColumn fx:id="columnHipsCircumference" prefWidth="48.0" text="HipsCircumference" />
+                        <TableColumn fx:id="columnWaistCircumferencr" prefWidth="49.0" text="WaistCircumferencr" />
+                        <TableColumn fx:id="columnCuffCirumference" prefWidth="52.0" text="CuffCirumference" />
+                        <TableColumn fx:id="columnNeckCirumference" prefWidth="48.0" text="NeckCirumference" />
+                        <TableColumn fx:id="columnChestCirumference" minWidth="5.0" prefWidth="49.0" text="ChestCirumference" />
+                        <TableColumn fx:id="columnShirtLength" prefWidth="43.0" text="ShirtLength" />
+                        <TableColumn fx:id="columnSleeveLength" prefWidth="44.0" text="SleeveLength" />
+                        <TableColumn fx:id="columnBicepCircumference" prefWidth="44.0" text="BicepCircumference" />
+                        <TableColumn fx:id="columnSleeveOpening" prefWidth="40.0" text="SleeveOpening" />
+                        <TableColumn fx:id="columnShoulderWidth" prefWidth="46.0" text="ShoulderWidth" />
+                        <TableColumn fx:id="columnColler" prefWidth="93.0" text="Coller" />
+                        <TableColumn fx:id="columnPrice" prefWidth="85.0" text="price" />
+                    </columns>
+                  </TableView>
+               </children>
+            </Pane>
+            <Label layoutX="144.0" layoutY="481.0" text="Rise:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="72.0" layoutY="523.0" text="LegOpening:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="13.0" layoutY="567.0" text="KneeCirumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="563.0" layoutY="567.0" text="SleeveOpening:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="287.0" layoutY="608.0" text="NeckCirumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="textCrotchDep" layoutX="189.0" layoutY="438.0" prefHeight="26.0" prefWidth="44.0" />
+            <Label layoutX="53.0" layoutY="650.0" text="InseamLength:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="285.0" layoutY="481.0" text="HipsCircumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="277.0" layoutY="524.0" text="WaistCircumferencr:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="299.0" layoutY="567.0" text="CuffCirumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="284.0" layoutY="650.0" text="ChestCirumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="594.0" layoutY="440.0" text="ShirtLength:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="576.0" layoutY="481.0" text="SleeveLength:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="517.0" layoutY="523.0" text="BicepCircumference:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="634.0" layoutY="651.0" text="Coller:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="565.0" layoutY="608.0" text="ShoulderWidth:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="textRice" layoutX="189.0" layoutY="479.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textLegOpe" layoutX="189.0" layoutY="521.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textKneeCirum" layoutX="189.0" layoutY="565.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textThighCirum" layoutX="189.0" layoutY="606.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textInseamL" layoutX="189.0" layoutY="648.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textOutSeamL" layoutX="464.0" layoutY="439.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textHipsCircum" layoutX="464.0" layoutY="479.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textWaistCircum" layoutX="464.0" layoutY="522.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textCuffCirum" layoutX="464.0" layoutY="565.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textNeckCirum" layoutX="464.0" layoutY="606.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textChestCirum" layoutX="464.0" layoutY="648.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textShirtL" layoutX="705.0" layoutY="438.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textSleeveL" layoutX="705.0" layoutY="479.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textBicepCircum" layoutX="705.0" layoutY="522.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textSleeveOp" layoutX="705.0" layoutY="565.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textShoulderWid" layoutX="705.0" layoutY="606.0" prefHeight="26.0" prefWidth="44.0" />
+            <JFXTextField fx:id="textColler" layoutX="705.0" layoutY="649.0" prefHeight="26.0" prefWidth="44.0" />
+            <Button layoutX="849.0" layoutY="786.0" mnemonicParsing="false" onAction="#btnClearOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #9E1390; -fx-background-radius: 7;" text="Clear" textFill="WHITE" />
+            <Button layoutX="987.0" layoutY="786.0" mnemonicParsing="false" onAction="#btnDeleteOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #C70039; -fx-background-radius: 7;" text="Delete" textFill="WHITE" />
+            <Button layoutX="709.0" layoutY="786.0" mnemonicParsing="false" onAction="#btnSaveOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #134E9E; -fx-background-radius: 7;" text="Save" textFill="WHITE" />
+            <Button layoutX="1131.0" layoutY="786.0" mnemonicParsing="false" onAction="#btnUpdateOnAction" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #139E20; -fx-background-radius: 7;" text="Update" textFill="WHITE" />
+            <Pane layoutX="463.0" layoutY="21.0" prefHeight="30.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 30;">
+               <children>
+                  <TextField fx:id="textSearch" layoutX="33.0" layoutY="1.0" onAction="#textSearchOnAction" prefHeight="26.0" prefWidth="351.0" promptText="Search......" style="-fx-background-radius: 30; -fx-background-color: white;" />
+                  <ImageView fitHeight="25.0" fitWidth="26.0" layoutX="14.0" layoutY="2.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@assests/icon/search.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Label layoutX="1031.0" layoutY="442.0" text="Order ID :">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableOrderId" layoutX="1131.0" layoutY="444.0">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="974.0" layoutY="596.0" text="Price">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="textPayment" layoutX="1038.0" layoutY="593.0" />
+            <Label layoutX="22.0" layoutY="25.0" text="Customer Id :">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="combCust" layoutX="161.0" layoutY="23.0" prefHeight="26.0" prefWidth="154.0" />
+            <Label layoutX="29.0" layoutY="826.0" text="Date :">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lableDate" layoutX="91.0" layoutY="829.0">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

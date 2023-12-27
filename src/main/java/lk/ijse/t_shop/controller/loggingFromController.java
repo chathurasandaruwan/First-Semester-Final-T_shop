@@ -9,31 +9,35 @@ import javafx.scene.Scene;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import lk.ijse.t_shop.dto.userDto;
-import lk.ijse.t_shop.model.LoggingModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.LoggingBO;
+import lk.ijse.t_shop.bo.custom.impl.LoggingBOImpl;
+import lk.ijse.t_shop.dao.custom.LoggingDAO;
+import lk.ijse.t_shop.dao.custom.impl.LoggingDAOImpl;
+import lk.ijse.t_shop.dto.UserDto;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
 public class loggingFromController {
-    private LoggingModel loggingModel=new LoggingModel();
     @FXML
     private AnchorPane rootLogIn;
 
     @FXML
     private JFXTextField textName;
+
     @FXML
     private ToggleButton btnToggle;
 
-
     @FXML
     private JFXPasswordField textPassword;
-    userDto dto=loggingModel.getAllInfo();
-     String userName=dto.getUsername();
-     String Password=dto.getPassword();
+    LoggingBO loggingBO = (LoggingBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.LOGGING);
+    UserDto dto=loggingBO.getAllUserDetail();
+    String userName=dto.getUsername();
+    String Password=dto.getPassword();
 
-    public loggingFromController() throws SQLException {
+    public loggingFromController() throws SQLException, ClassNotFoundException {
     }
 
 
@@ -44,7 +48,7 @@ public class loggingFromController {
 
        if (name.equals(userName)) {
            if (password.equals(Password)) {
-               AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/button_bar_form.fxml"));
+               AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/button_bar_form.fxml"));
                Scene scene = new Scene(anchorPane);
 
                Stage stage = (Stage) rootLogIn.getScene().getWindow();
@@ -82,7 +86,7 @@ public class loggingFromController {
     }
     @FXML
     void btnForgetPasswordOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/forgotPassword_form.fxml"));
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/forgotPassword_form.fxml"));
         Scene scene = new Scene(anchorPane);
 
         Stage stage = (Stage) rootLogIn.getScene().getWindow();

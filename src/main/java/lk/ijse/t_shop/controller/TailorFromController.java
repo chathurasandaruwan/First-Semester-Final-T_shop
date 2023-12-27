@@ -10,12 +10,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.itemDto;
-import lk.ijse.t_shop.dto.raw_materialDto;
-import lk.ijse.t_shop.dto.tailorDto;
-import lk.ijse.t_shop.model.ItemModel;
-import lk.ijse.t_shop.model.TailorModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.TailorBO;
+import lk.ijse.t_shop.bo.custom.impl.TailorBOImpl;
+import lk.ijse.t_shop.dao.custom.ItemDAO;
+import lk.ijse.t_shop.dao.custom.TailorDAO;
+import lk.ijse.t_shop.dao.custom.impl.ItemDAOImpl;
+import lk.ijse.t_shop.dao.custom.impl.TailorDAOImpl;
+import lk.ijse.t_shop.dto.ItemDto;
+import lk.ijse.t_shop.dto.TailorDto;
+import lk.ijse.t_shop.view.tdm.TailorTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -24,7 +28,7 @@ import java.util.regex.Pattern;
 public class TailorFromController {
 
     @FXML
-    private TableView<tailorDto> tableTailer;
+    private TableView<TailorTm> tableTailer;
 
     @FXML
     private TableColumn<?, ?> columnId;
@@ -51,8 +55,7 @@ public class TailorFromController {
 
     @FXML
     private JFXComboBox<String> combItem;
-    private ItemModel itemModel=new ItemModel();
-    private TailorModel model = new TailorModel();
+    TailorBO tailorBO = (TailorBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.TAILOR);
 
    public void initialize(){
        loadItemCodes();
@@ -70,21 +73,25 @@ public class TailorFromController {
     private void loadItemCodes() {
         ObservableList<String> obList = FXCollections.observableArrayList();
         try {
-            List<itemDto> idList = itemModel.getAllItem();
-            for (itemDto dto : idList) {
+            List<ItemDto> idList = tailorBO.getAllItem();
+            for (ItemDto dto : idList) {
                 obList.add(dto.getItemCode());
             }
             combItem.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private void genarateNextTailorId(){
        try {
-           String id = model.genarateNextId();
+           String id = tailorBO.generateNextTailorId();
            textId.setText(id);
        } catch (SQLException e) {
+           throw new RuntimeException(e);
+       } catch (ClassNotFoundException e) {
            throw new RuntimeException(e);
        }
     }
@@ -92,7 +99,7 @@ public class TailorFromController {
     void btnDeleteOnAction(ActionEvent event) {
         String id = textId.getText();
         try {
-            boolean isDelete = model.deleteTailor(id);
+            boolean isDelete = tailorBO.deleteTailor(id);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -101,6 +108,8 @@ public class TailorFromController {
                 new Alert(Alert.AlertType.ERROR,"Tailor not Found").show();
             }
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -113,10 +122,10 @@ public class TailorFromController {
        String name = textName.getText();
        int tel = Integer.parseInt(textTel.getText());
        String itemCode = combItem.getValue();
-       var dto =new tailorDto(id,name,tel,itemCode);
+       var dto =new TailorDto(id,name,tel,itemCode);
        if (isCorrect) {
            try {
-               boolean isSaved = model.saveTailor(dto);
+               boolean isSaved = tailorBO.saveTailor(dto);
                if (isSaved) {
                    new Alert(Alert.AlertType.INFORMATION, "Tailor Saved Successful").show();
                    clearFiled();
@@ -124,6 +133,8 @@ public class TailorFromController {
                }
            } catch (SQLException e) {
                new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
+               throw new RuntimeException(e);
+           } catch (ClassNotFoundException e) {
                throw new RuntimeException(e);
            }
        }
@@ -147,8 +158,8 @@ public class TailorFromController {
         return true;
     }
 
-    private void clearFiled() throws SQLException {
-       textId.setText(model.genarateNextId());
+    private void clearFiled() throws SQLException, ClassNotFoundException {
+       textId.setText(tailorBO.generateNextTailorId());
        textName.setText("");
        textTel.setText("");
        combItem.setValue("");
@@ -163,9 +174,9 @@ public class TailorFromController {
         int tel = Integer.parseInt(textTel.getText());
         String itemCode = combItem.getValue();
         if (isCorrect) {
-            var dto = new tailorDto(id, name, tel, itemCode);
+            var dto = new TailorDto(id, name, tel, itemCode);
             try {
-                boolean isUpdate = model.updateTailor(dto);
+                boolean isUpdate = tailorBO.updateTailor(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -175,12 +186,14 @@ public class TailorFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
 
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         clearFiled();
     }
 
@@ -188,7 +201,7 @@ public class TailorFromController {
     void textSearchOnAction(ActionEvent event) {
         String id=textSearch.getText();
         try {
-            tailorDto dto = model.searchTailer(id);
+            TailorDto dto = tailorBO.searchTailor(id);
             if (dto!= null){
                 textId.setText(dto.getTailerId());
                 textName.setText(dto.getName());
@@ -200,18 +213,18 @@ public class TailorFromController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
     void loadAllTailor(){
-        ObservableList<tailorDto> obList = FXCollections.observableArrayList();
-
+        ObservableList<TailorTm> obList = FXCollections.observableArrayList();
         try {
-            List<tailorDto> dtoList = model.getAllTailor();
-
-            for (tailorDto dto : dtoList) {
+            List<TailorDto> dtoList = tailorBO.getAllTailor();
+            for (TailorDto dto : dtoList) {
                 obList.add(
-                        new tailorDto(
+                        new TailorTm(
                                 dto.getTailerId(),
                                 dto.getName(),
                                 dto.getContacNo(),
@@ -219,9 +232,10 @@ public class TailorFromController {
                         )
                 );
             }
-
             tableTailer.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

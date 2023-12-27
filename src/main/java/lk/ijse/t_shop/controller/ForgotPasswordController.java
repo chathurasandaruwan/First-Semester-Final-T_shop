@@ -9,8 +9,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import lk.ijse.t_shop.dto.userDto;
-import lk.ijse.t_shop.model.LoggingModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.ForgotPasswordBO;
+import lk.ijse.t_shop.bo.custom.impl.ForgotPasswordBOImpl;
+import lk.ijse.t_shop.dao.custom.LoggingDAO;
+import lk.ijse.t_shop.dao.custom.impl.LoggingDAOImpl;
+import lk.ijse.t_shop.dto.UserDto;
 import org.controlsfx.control.Notifications;
 
 import java.io.IOException;
@@ -31,23 +35,23 @@ public class ForgotPasswordController {
     @FXML
     private TextField textContactNo;
 
-    private LoggingModel loggingModel =new LoggingModel();
+    ForgotPasswordBO forgotPasswordBO = (ForgotPasswordBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.FORGOT_PASSWORD);
 
     @FXML
-    void btnNextOnAction(ActionEvent event) throws IOException, SQLException {
+    void btnNextOnAction(ActionEvent event) throws IOException, SQLException, ClassNotFoundException {
         String userName = textUserName.getText();
         String contactNo = textContactNo.getText();
-        userDto dto = loggingModel.getAllInfo();
+        UserDto dto = forgotPasswordBO.getAllDetail();
 
         if (userName.equals(dto.getUsername())) {
             if (contactNo.equals(dto.getContactNo())) {
 
-                Parent rootNode = FXMLLoader.load(getClass().getResource("/view/change_password_form.fxml"));
+                Parent rootNode = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/change_password_form.fxml"));
 
                 changeRoot.getChildren().clear();
                 changeRoot.getChildren().add(rootNode);
 
-                Parent rootNode1 = FXMLLoader.load(getClass().getResource("/view/hideForm.fxml"));
+                Parent rootNode1 = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/hideForm.fxml"));
 
                 forgotRoot.getChildren().clear();
                 forgotRoot.getChildren().add(rootNode1);
@@ -69,7 +73,7 @@ public class ForgotPasswordController {
 
     @FXML
     void btnBackOnAction(ActionEvent event) throws IOException {
-        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/view/login_form.fxml"));
+        AnchorPane anchorPane = FXMLLoader.load(getClass().getResource("/lk/ijse/t_shop/login_form.fxml"));
         Scene scene = new Scene(anchorPane);
 
         Stage stage = (Stage) root.getScene().getWindow();

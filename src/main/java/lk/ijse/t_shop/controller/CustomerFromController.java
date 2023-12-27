@@ -6,9 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import lk.ijse.t_shop.dto.customerDto;
-import lk.ijse.t_shop.dto.tm.customerTm;
-import lk.ijse.t_shop.model.CustomerModel;
+import lk.ijse.t_shop.bo.BOFactory;
+import lk.ijse.t_shop.bo.custom.CustomerBO;
+import lk.ijse.t_shop.bo.custom.impl.CustomerBOImpl;
+import lk.ijse.t_shop.dao.custom.CustomerDAO;
+import lk.ijse.t_shop.dao.custom.impl.CustomerDAOImpl;
+import lk.ijse.t_shop.dto.CustomerDto;
+import lk.ijse.t_shop.view.tdm.customerTm;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -45,9 +49,7 @@ public class CustomerFromController {
 
     @FXML
     private TextField textSearch;
-
-    private CustomerModel model = new CustomerModel();
-
+    CustomerBO customerBO = (CustomerBO) BOFactory.getBoFactory().getBO(BOFactory.BOType.CUSTOMER);
     public void initialize() {
         genarateNextCustId();
         selectAllFromCustomer();
@@ -59,8 +61,8 @@ public class CustomerFromController {
         columnAdd.setCellValueFactory(new PropertyValueFactory<>("address"));
         columntel.setCellValueFactory(new PropertyValueFactory<>("contacNo"));
     }
-    public void clearFiled() throws SQLException {
-       lblcustomerId.setText(model.genarateCustId());
+    public void clearFiled() throws SQLException, ClassNotFoundException {
+       lblcustomerId.setText(customerBO.generateNextCustomerId());
        textName.setText("");
        textAddress.setText("");
        texTel.setText("");
@@ -68,21 +70,23 @@ public class CustomerFromController {
    }
     public void genarateNextCustId(){
         try {
-            String custId= model.genarateCustId();
+            String custId= customerBO.generateNextCustomerId();
             lblcustomerId.setText(custId);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
     @FXML
-    void btnClearOnAction(ActionEvent event) throws SQLException {
+    void btnClearOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         clearFiled();
     }
     @FXML
     void btnDeleteOnAction(ActionEvent event) {
         String id = lblcustomerId.getText();
         try {
-            boolean isDelete = model.deleteCustomer(id);
+            boolean isDelete = customerBO.deleteCustomer(id);
             if (isDelete) {
                 new Alert(Alert.AlertType.INFORMATION, "Delete Successful").show();
                 clearFiled();
@@ -92,6 +96,8 @@ public class CustomerFromController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     @FXML
@@ -100,11 +106,11 @@ public class CustomerFromController {
         String name = textName.getText();
         String address = textAddress.getText();
         String contactNo = texTel.getText();
-        var dto = new customerDto(cutId,name,address,contactNo);
+        var dto = new CustomerDto(cutId,name,address,contactNo);
         boolean isCorrect =validateCustomer(dto);
         if (isCorrect) {
             try {
-                boolean isSaved = model.saveCustomer(dto);
+                boolean isSaved = customerBO.saveCustomer(dto);
                 if (isSaved) {
                     new Alert(Alert.AlertType.INFORMATION, "Customer Saved Successful").show();
                     clearFiled();
@@ -113,10 +119,12 @@ public class CustomerFromController {
             } catch (SQLException e) {
                 new Alert(Alert.AlertType.ERROR, e.getMessage()).show();
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
-    private boolean validateCustomer(customerDto dto) {
+    private boolean validateCustomer(CustomerDto dto) {
         boolean matches = Pattern.compile("[C][0-9]{3,}").matcher(dto.getCustId()).matches();
         if (!matches){
             new Alert(Alert.AlertType.ERROR,"Invalid Customer !!").show();
@@ -146,11 +154,11 @@ public class CustomerFromController {
         String address = textAddress.getText();
         String tel = texTel.getText();
 
-        var dto = new customerDto(id,name,address,tel);
+        var dto = new CustomerDto(id,name,address,tel);
         boolean isCorrect = validateCustomer(dto);
         if (isCorrect) {
             try {
-                boolean isUpdate = model.updateCustomer(dto);
+                boolean isUpdate = customerBO.updateCustomer(dto);
                 if (isUpdate) {
                     new Alert(Alert.AlertType.INFORMATION, "Update Successfully").show();
                     clearFiled();
@@ -160,6 +168,8 @@ public class CustomerFromController {
                 }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -167,7 +177,7 @@ public class CustomerFromController {
     void textSearchOnAction(ActionEvent event){
         String id=textSearch.getText();
         try {
-            customerDto dto = model.searchCustomer(id);
+            CustomerDto dto = customerBO.searchCustomer(id);
             if (dto!= null){
                 lblcustomerId.setText(dto.getCustId());
                 textName.setText(dto.getName());
@@ -178,16 +188,17 @@ public class CustomerFromController {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
     void selectAllFromCustomer(){
-       // var model = new customerDto();
         ObservableList<customerTm> obList = FXCollections.observableArrayList();
 
         try {
-            List<customerDto> dtoList = model.getAllCustomer();
+            List<CustomerDto> dtoList = customerBO.getAllCustomer();
 
-            for (customerDto dto : dtoList) {
+            for (CustomerDto dto : dtoList) {
                 obList.add(
                         new customerTm(
                                 dto.getCustId(),
@@ -200,6 +211,8 @@ public class CustomerFromController {
 
             tblCust.setItems(obList);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
 
