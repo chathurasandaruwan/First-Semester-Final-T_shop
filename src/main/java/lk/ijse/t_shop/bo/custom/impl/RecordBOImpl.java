@@ -10,8 +10,13 @@ import lk.ijse.t_shop.dao.custom.impl.OrderDAOImpl;
 import lk.ijse.t_shop.dao.custom.impl.RecordDAOImpl;
 import lk.ijse.t_shop.db.DbConnection;
 import lk.ijse.t_shop.dto.CustomerDto;
+import lk.ijse.t_shop.dto.ItemDto;
 import lk.ijse.t_shop.dto.OrderDto;
 import lk.ijse.t_shop.dto.RecordDto;
+import lk.ijse.t_shop.entity.Customer;
+import lk.ijse.t_shop.entity.Item;
+import lk.ijse.t_shop.entity.Order;
+import lk.ijse.t_shop.entity.Record;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -32,9 +37,12 @@ public class RecordBOImpl implements RecordBO {
             connection = DbConnection.getInstance().getConnection();
             connection.setAutoCommit(false);
 
-            boolean isOrderSaved = orderDAO.save(new OrderDto(orderId,custId, date));
+            boolean isOrderSaved = orderDAO.save(new Order(orderId,custId, date));
             if (isOrderSaved){
-                boolean isRecSaved =recordDAO.save(dto);
+                boolean isRecSaved =recordDAO.save(new Record(dto.getRecordId(),
+                        dto.getType(),dto.getCrotchDep(),dto.getRice(),dto.getLegOpe(),dto.getKneeCirum(),dto.getThighCirum(),dto.getOutSeamL(),dto.getInseamL(),
+                        dto.getHipsCircum(),dto.getWaistCircum(),dto.getCuffCirum(),dto.getNeckCirum(),dto.getChestCirum(),dto.getShirtL(),dto.getShoulderWid(),
+                        dto.getSleeveL(),dto.getBicepCircum(),dto.getSleeveOp(),dto.getColler(),dto.getOrderId(),dto.getPrice(),dto.getCustId()));
                 if (isRecSaved){
                     connection.commit();
                 }
@@ -50,15 +58,28 @@ public class RecordBOImpl implements RecordBO {
     }
     @Override
     public ArrayList<RecordDto> getAllRecord() throws SQLException, ClassNotFoundException {
-        return recordDAO.getAll();
+        ArrayList<RecordDto> recordDtos = new ArrayList<>();
+        ArrayList<Record> records = recordDAO.getAll();
+        for (Record record : records) {
+            recordDtos.add(new RecordDto(record.getRecordId(),
+                    record.getType(),record.getCrotchDep(),record.getRice(),record.getLegOpe(),record.getKneeCirum(),record.getThighCirum(),record.getOutSeamL(),record.getInseamL(),
+                    record.getHipsCircum(),record.getWaistCircum(),record.getCuffCirum(),record.getNeckCirum(),record.getChestCirum(),record.getShirtL(),record.getShoulderWid(),
+                    record.getSleeveL(),record.getBicepCircum(),record.getSleeveOp(),record.getColler(),record.getOrderId(),record.getPrice(),record.getCustId()));
+        }
+        return recordDtos;
     }
     @Override
     public boolean saveRecord(RecordDto dto) throws SQLException, ClassNotFoundException {
-        return recordDAO.save(dto);
+        return recordDAO.save(new Record(dto.getRecordId(),
+                dto.getType(),dto.getCrotchDep(),dto.getRice(),dto.getLegOpe(),dto.getKneeCirum(),dto.getThighCirum(),dto.getOutSeamL(),dto.getInseamL(),
+                dto.getHipsCircum(),dto.getWaistCircum(),dto.getCuffCirum(),dto.getNeckCirum(),dto.getChestCirum(),dto.getShirtL(),dto.getShoulderWid(),
+                dto.getSleeveL(),dto.getBicepCircum(),dto.getSleeveOp(),dto.getColler(),dto.getOrderId(),dto.getPrice(),dto.getCustId()));
     }
     @Override
     public boolean updateRecord(RecordDto dto) throws SQLException, ClassNotFoundException {
-        return recordDAO.update(dto);
+        return recordDAO.update(new Record(dto.getCrotchDep(),dto.getRice(),dto.getLegOpe(),dto.getKneeCirum(),dto.getThighCirum(),dto.getOutSeamL(),dto.getInseamL(),
+                dto.getHipsCircum(),dto.getWaistCircum(),dto.getCuffCirum(),dto.getNeckCirum(),dto.getChestCirum(),dto.getShirtL(),dto.getShoulderWid(),
+                dto.getSleeveL(),dto.getBicepCircum(),dto.getSleeveOp(),dto.getColler(),dto.getPrice(),dto.getRecordId()));
     }
     @Override
     public boolean deleteRecord(String id) throws SQLException, ClassNotFoundException {
@@ -70,11 +91,20 @@ public class RecordBOImpl implements RecordBO {
     }
     @Override
     public RecordDto searchRecord(String newValue) throws SQLException, ClassNotFoundException {
-        return recordDAO.search(newValue);
+        Record dto= recordDAO.search(newValue);
+        return new RecordDto(dto.getRecordId(),
+                dto.getType(),dto.getCrotchDep(),dto.getRice(),dto.getLegOpe(),dto.getKneeCirum(),dto.getThighCirum(),dto.getOutSeamL(),dto.getInseamL(),
+                dto.getHipsCircum(),dto.getWaistCircum(),dto.getCuffCirum(),dto.getNeckCirum(),dto.getChestCirum(),dto.getShirtL(),dto.getShoulderWid(),
+                dto.getSleeveL(),dto.getBicepCircum(),dto.getSleeveOp(),dto.getColler(),dto.getOrderId(),dto.getPrice(),dto.getCustId());
     }
     @Override
     public ArrayList<CustomerDto> getAllCustomer() throws SQLException, ClassNotFoundException {
-        return customerDAO.getAll();
+        ArrayList<CustomerDto> customerDTOS = new ArrayList<>();
+        ArrayList<Customer> customers = customerDAO.getAll();
+        for (Customer customer : customers) {
+            customerDTOS.add(new CustomerDto(customer.getCustId(),customer.getName(),customer.getAddress(),customer.getContacNo()));
+        }
+        return customerDTOS;
     }
     @Override
     public String generateNextOrderId() throws SQLException, ClassNotFoundException {

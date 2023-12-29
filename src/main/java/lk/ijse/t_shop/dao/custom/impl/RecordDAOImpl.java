@@ -2,7 +2,7 @@ package lk.ijse.t_shop.dao.custom.impl;
 
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.RecordDAO;
-import lk.ijse.t_shop.dto.RecordDto;
+import lk.ijse.t_shop.entity.Record;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,12 +10,12 @@ import java.util.ArrayList;
 
 public class RecordDAOImpl implements RecordDAO {
     @Override
-    public ArrayList<RecordDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Record> getAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM record");
-        ArrayList<RecordDto> dtos = new ArrayList<>();
+        ArrayList<Record> dtos = new ArrayList<>();
         while (resultSet.next()){
             dtos.add(
-                    new RecordDto(
+                    new Record(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getDouble(3),
@@ -46,7 +46,7 @@ public class RecordDAOImpl implements RecordDAO {
     }
 
     @Override
-    public boolean save(RecordDto dto) throws SQLException, ClassNotFoundException {
+    public boolean save(Record dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute("INSERT INTO record VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",dto.getRecordId(),
                 dto.getType(),dto.getCrotchDep(),dto.getRice(),dto.getLegOpe(),dto.getKneeCirum(),dto.getThighCirum(),dto.getOutSeamL(),dto.getInseamL(),
                 dto.getHipsCircum(),dto.getWaistCircum(),dto.getCuffCirum(),dto.getNeckCirum(),dto.getChestCirum(),dto.getShirtL(),dto.getShoulderWid(),
@@ -54,7 +54,7 @@ public class RecordDAOImpl implements RecordDAO {
     }
 
     @Override
-    public boolean update(RecordDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Record dto) throws SQLException, ClassNotFoundException {
         return SQLUtil.execute( "UPDATE record "
                 + "SET "
                 + "crotchDepth = ?, "
@@ -110,9 +110,9 @@ public class RecordDAOImpl implements RecordDAO {
     }
 
     @Override
-    public RecordDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Record search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM record WHERE recId = ?",newValue);
-        RecordDto dto=null;
+        Record dto=null;
         if (resultSet.next()){
             String recId= resultSet.getString(1);
             String type =resultSet.getString(2);
@@ -137,7 +137,7 @@ public class RecordDAOImpl implements RecordDAO {
             String orderId = resultSet.getString(21);
             String price = resultSet.getString(22);
             String custId = resultSet.getString(23);
-            dto = new RecordDto(recId,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,custId);
+            dto = new Record(recId,type,Cd,rice,legOpen,kneeCrium,thighCirum,outSleam,inseamL,hiperC,waistC,Cuffc,neckC,chestC,shirtL,shoulderW,sleevL,bicepC,sleevO,coller,orderId,price,custId);
         }
         return dto;
     }

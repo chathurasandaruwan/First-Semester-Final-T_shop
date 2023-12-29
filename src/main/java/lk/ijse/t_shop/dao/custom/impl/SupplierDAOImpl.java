@@ -3,6 +3,7 @@ package lk.ijse.t_shop.dao.custom.impl;
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.SupplierDAO;
 import lk.ijse.t_shop.dto.SupplierDto;
+import lk.ijse.t_shop.entity.Supplier;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,12 +11,12 @@ import java.util.ArrayList;
 
 public class SupplierDAOImpl implements SupplierDAO {
     @Override
-    public ArrayList<SupplierDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Supplier> getAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM supplier");
-        ArrayList<SupplierDto> dtos = new ArrayList<>();
+        ArrayList<Supplier> dtos = new ArrayList<>();
         while (resultSet.next()){
             dtos.add(
-                    new SupplierDto(
+                    new Supplier(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
@@ -27,13 +28,13 @@ public class SupplierDAOImpl implements SupplierDAO {
     }
 
     @Override
-    public boolean save(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO supplier VALUES(?, ?, ?, ?)",dto.getSupId(),dto.getName(),dto.getDescription(),dto.getContacNo());
+    public boolean save(Supplier entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO supplier VALUES(?, ?, ?, ?)",entity.getSupId(),entity.getName(),entity.getDescription(),entity.getContacNo());
     }
 
     @Override
-    public boolean update(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE supplier SET name = ?, description = ?, contacNo = ? WHERE supId = ?",dto.getName(),dto.getDescription(),dto.getContacNo(),dto.getSupId());
+    public boolean update(Supplier entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE supplier SET name = ?, description = ?, contacNo = ? WHERE supId = ?",entity.getName(),entity.getDescription(),entity.getContacNo(),entity.getSupId());
     }
 
     @Override
@@ -65,15 +66,15 @@ public class SupplierDAOImpl implements SupplierDAO {
     }
 
     @Override
-    public SupplierDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Supplier search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM supplier WHERE supId = ?",newValue);
-        SupplierDto dto=null;
+        Supplier dto=null;
         if (resultSet.next()){
             String supId = resultSet.getString(1);
             String name = resultSet.getString(2);
             String description = resultSet.getString(3);
             String contacNo = resultSet.getString(4);
-            dto=new SupplierDto(supId,name,description,contacNo);
+            dto=new Supplier(supId,name,description,contacNo);
         }
         return dto;
     }

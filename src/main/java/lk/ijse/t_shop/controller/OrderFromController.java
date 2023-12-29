@@ -15,27 +15,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import lk.ijse.t_shop.bo.BOFactory;
-import lk.ijse.t_shop.bo.custom.ItemBO;
 import lk.ijse.t_shop.bo.custom.OrderBO;
-import lk.ijse.t_shop.bo.custom.impl.ItemBOImpl;
-import lk.ijse.t_shop.bo.custom.impl.OrderBOImpl;
-import lk.ijse.t_shop.dao.custom.CustomerDAO;
-import lk.ijse.t_shop.dao.custom.ItemDAO;
-import lk.ijse.t_shop.dao.custom.OrderDAO;
-import lk.ijse.t_shop.dao.custom.OrderDetailDAO;
-import lk.ijse.t_shop.dao.custom.impl.CustomerDAOImpl;
-import lk.ijse.t_shop.dao.custom.impl.ItemDAOImpl;
-import lk.ijse.t_shop.dao.custom.impl.OrderDAOImpl;
-import lk.ijse.t_shop.dao.custom.impl.OrderDetailDAOImpl;
-import lk.ijse.t_shop.db.DbConnection;
-import lk.ijse.t_shop.dto.OrderDto;
-import lk.ijse.t_shop.dto.PlaceOrderDto;
 import lk.ijse.t_shop.dto.CustomerDto;
 import lk.ijse.t_shop.dto.ItemDto;
+import lk.ijse.t_shop.dto.PlaceOrderDto;
 import lk.ijse.t_shop.view.tdm.CartTm;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -101,7 +87,7 @@ public class OrderFromController {
     private Label lableDesc;
 
     @FXML
-    private JFXComboBox<String> combItemCode;
+    private JFXComboBox<String>  combItemCode;
 
     @FXML
     private Label lableQuntity;
@@ -126,7 +112,7 @@ public class OrderFromController {
         setCellValueFactory();
     }
     public void clearFailed(){
-        combItemCode.setValue("");
+        combItemCode.setValue(null);
         lableDesc.setText("");
         lableColor.setText("");
         lableSize.setText("");
@@ -135,7 +121,7 @@ public class OrderFromController {
         lableDiscountPre.setText("");
     }
     public void afterPlaseBtn() throws SQLException, ClassNotFoundException {
-        combCustId.setValue("");
+        combCustId.setValue(null);
         lableOrderId.setText(orderBO.generateNextOrderId());
         lableNetTotal.setText("");
         lableCustName.setText("");
@@ -307,34 +293,37 @@ public class OrderFromController {
     @FXML
     void combCustIdOnAction(ActionEvent event) {
         String id = combCustId.getValue();
-        try {
-            CustomerDto customerDto = orderBO.searchCustomer(id);
-            lableCustName.setText(customerDto.getName());
+        if (id!=null) {
+            try {
+                CustomerDto customerDto = orderBO.searchCustomer(id);
+                lableCustName.setText(customerDto.getName());
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
     @FXML
-    void comnItemOnAction(ActionEvent event) {
+    void combItemOnAction(ActionEvent event) {
         String code = combItemCode.getValue();
-
-        textQty.requestFocus();
-        try {
-            ItemDto dto = orderBO.searchItem(code);
-            lableDesc.setText(dto.getType());
-            lablePrice.setText(String.valueOf(dto.getPrice()));
-            lableQuntity.setText(String.valueOf(dto.getQuntity()));
-            lableDiscountPre.setText(String.valueOf(dto.getDiscountPercentage()));
-            lableSize.setText(dto.getSize());
-            lableColor.setText(dto.getColor());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        if (code != null) {
+            textQty.requestFocus();
+            try {
+                ItemDto dto = orderBO.searchItem(code);
+                lableDesc.setText(dto.getType());
+                lablePrice.setText(String.valueOf(dto.getPrice()));
+                lableQuntity.setText(String.valueOf(dto.getQuntity()));
+                lableDiscountPre.setText(String.valueOf(dto.getDiscountPercentage()));
+                lableSize.setText(dto.getSize());
+                lableColor.setText(dto.getColor());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

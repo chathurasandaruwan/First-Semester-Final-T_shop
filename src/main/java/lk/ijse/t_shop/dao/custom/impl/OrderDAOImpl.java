@@ -4,23 +4,24 @@ import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.OrderDAO;
 import lk.ijse.t_shop.db.DbConnection;
 import lk.ijse.t_shop.dto.OrderDto;
+import lk.ijse.t_shop.entity.Order;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class OrderDAOImpl implements OrderDAO {
     @Override
-    public ArrayList<OrderDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Order> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(OrderDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO orders VALUES(?, ?, ?)",dto.getOrderId(),Date.valueOf(dto.getDate()),dto.getCustomerId());
+    public boolean save(Order entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO orders VALUES(?, ?, ?)",entity.getOrderId(),Date.valueOf(entity.getDate()),entity.getCustomerId());
     }
 
     @Override
-    public boolean update(OrderDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(Order entity) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -53,7 +54,7 @@ public class OrderDAOImpl implements OrderDAO {
     }
 
     @Override
-    public OrderDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Order search(String newValue) throws SQLException, ClassNotFoundException {
         return null;
     }
 }

@@ -3,6 +3,7 @@ package lk.ijse.t_shop.dao.custom.impl;
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.RawMaterialDAO;
 import lk.ijse.t_shop.dto.Raw_materialDto;
+import lk.ijse.t_shop.entity.Raw_material;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,12 +12,12 @@ import java.util.ArrayList;
 public class RawMaterialDAOImpl implements RawMaterialDAO {
 
     @Override
-    public ArrayList<Raw_materialDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Raw_material> getAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM rawMaterial");
-        ArrayList<Raw_materialDto> dtos = new ArrayList<>();
+        ArrayList<Raw_material> dtos = new ArrayList<>();
         while (resultSet.next()){
             dtos.add(
-                    new Raw_materialDto(
+                    new Raw_material(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getInt(3)
@@ -27,13 +28,13 @@ public class RawMaterialDAOImpl implements RawMaterialDAO {
     }
 
     @Override
-    public boolean save(Raw_materialDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO rawMaterial VALUES(?, ?, ?)",dto.getRawID(),dto.getName(),String.valueOf(dto.getQuntity()));
+    public boolean save(Raw_material entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO rawMaterial VALUES(?, ?, ?)",entity.getRawID(),entity.getName(),String.valueOf(entity.getQuntity()));
     }
 
     @Override
-    public boolean update(Raw_materialDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE rawMaterial SET name =?, quntity =? WHERE rawId = ?",dto.getName(),String.valueOf(dto.getQuntity()),dto.getRawID());
+    public boolean update(Raw_material entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE rawMaterial SET name =?, quntity =? WHERE rawId = ?",entity.getName(),String.valueOf(entity.getQuntity()),entity.getRawID());
     }
 
     @Override
@@ -65,14 +66,14 @@ public class RawMaterialDAOImpl implements RawMaterialDAO {
     }
 
     @Override
-    public Raw_materialDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Raw_material search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM rawMaterial WHERE rawId = ?",newValue);
-        Raw_materialDto dto=null;
+        Raw_material dto=null;
         if (resultSet.next()){
             String rawId = resultSet.getString(1);
             String name = resultSet.getString(2);
             int qty = resultSet.getInt(3);
-            dto=new Raw_materialDto(rawId,name,qty);
+            dto=new Raw_material(rawId,name,qty);
         }
         return dto;
     }

@@ -3,6 +3,7 @@ package lk.ijse.t_shop.dao.custom.impl;
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.TailorDAO;
 import lk.ijse.t_shop.dto.TailorDto;
+import lk.ijse.t_shop.entity.Tailor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,12 +12,12 @@ import java.util.ArrayList;
 public class TailorDAOImpl implements TailorDAO {
 
     @Override
-    public ArrayList<TailorDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Tailor> getAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM tailer");
-        ArrayList<TailorDto> dtos = new ArrayList<>();
+        ArrayList<Tailor> dtos = new ArrayList<>();
         while (resultSet.next()){
             dtos.add(
-                    new TailorDto(
+                    new Tailor(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getInt(3),
@@ -28,13 +29,13 @@ public class TailorDAOImpl implements TailorDAO {
     }
 
     @Override
-    public boolean save(TailorDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO tailer VALUES(?, ?, ?, ?)",dto.getTailerId(),dto.getName(),dto.getContacNo(),dto.getItemCode());
+    public boolean save(Tailor entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO tailer VALUES(?, ?, ?, ?)",entity.getTailerId(),entity.getName(),entity.getContacNo(),entity.getItemCode());
     }
 
     @Override
-    public boolean update(TailorDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE tailer SET name =?, contacNo =?, itemCode =? WHERE tailerId = ?",dto.getName(),dto.getContacNo(),dto.getItemCode(),dto.getTailerId());
+    public boolean update(Tailor entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE tailer SET name =?, contacNo =?, itemCode =? WHERE tailerId = ?",entity.getName(),entity.getContacNo(),entity.getItemCode(),entity.getTailerId());
     }
 
     @Override
@@ -66,15 +67,15 @@ public class TailorDAOImpl implements TailorDAO {
     }
 
     @Override
-    public TailorDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Tailor search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM tailer WHERE tailerId = ?",newValue);
-        TailorDto dto=null;
+        Tailor dto=null;
         if (resultSet.next()){
             String Id = resultSet.getString(1);
             String name = resultSet.getString(2);
             int qty = resultSet.getInt(3);
             String ItemCode = resultSet.getString(4);
-            dto=new TailorDto(Id,name,qty,ItemCode);
+            dto=new Tailor(Id,name,qty,ItemCode);
         }
         return dto;
     }

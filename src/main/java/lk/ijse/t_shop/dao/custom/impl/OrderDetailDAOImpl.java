@@ -3,6 +3,7 @@ package lk.ijse.t_shop.dao.custom.impl;
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.OrderDetailDAO;
 import lk.ijse.t_shop.dto.PlaceOrderDto;
+import lk.ijse.t_shop.entity.PlaceOrder;
 import lk.ijse.t_shop.view.tdm.CartTm;
 
 import java.sql.SQLException;
@@ -13,14 +14,14 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
 
 
     @Override
-    public ArrayList<PlaceOrderDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<PlaceOrder> getAll() throws SQLException, ClassNotFoundException {
         return null;
     }
 
     @Override
-    public boolean save(PlaceOrderDto dto) throws SQLException, ClassNotFoundException {
-        String orderId = dto.getOrderId();
-        List<CartTm> cartTmList = dto.getCartTmList();
+    public boolean save(PlaceOrder entity) throws SQLException, ClassNotFoundException {
+        String orderId = entity.getOrderId();
+        List<CartTm> cartTmList = entity.getCartTmList();
         for(CartTm tm : cartTmList) {
             if(!saveOrderDetail(orderId, tm)) {
                 return false;
@@ -34,7 +35,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     }
 
     @Override
-    public boolean update(PlaceOrderDto dto) throws SQLException, ClassNotFoundException {
+    public boolean update(PlaceOrder entity) throws SQLException, ClassNotFoundException {
         return false;
     }
 
@@ -54,7 +55,7 @@ public class OrderDetailDAOImpl implements OrderDetailDAO {
     }
 
     @Override
-    public PlaceOrderDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public PlaceOrder search(String newValue) throws SQLException, ClassNotFoundException {
         return null;
     }
 }

@@ -4,7 +4,10 @@ import lk.ijse.t_shop.bo.custom.SupplierBO;
 import lk.ijse.t_shop.dao.DAOFactory;
 import lk.ijse.t_shop.dao.custom.SupplierDAO;
 import lk.ijse.t_shop.dao.custom.impl.SupplierDAOImpl;
+import lk.ijse.t_shop.dto.ItemDto;
 import lk.ijse.t_shop.dto.SupplierDto;
+import lk.ijse.t_shop.entity.Item;
+import lk.ijse.t_shop.entity.Supplier;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,15 +16,20 @@ public class SupplierBOImpl implements SupplierBO {
     SupplierDAO supplierDAO = (SupplierDAO) DAOFactory.getDaoFactory().getDAO(DAOFactory.DAOType.SUPPLIER);
     @Override
     public ArrayList<SupplierDto> getAllSupplier() throws SQLException, ClassNotFoundException {
-        return supplierDAO.getAll();
+        ArrayList<SupplierDto> supplierDtos = new ArrayList<>();
+        ArrayList<Supplier> suppliers = supplierDAO.getAll();
+        for (Supplier supplier : suppliers) {
+            supplierDtos.add(new SupplierDto(supplier.getSupId(),supplier.getName(),supplier.getDescription(),supplier.getContacNo()));
+        }
+        return supplierDtos;
     }
     @Override
     public boolean saveSupplier(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return supplierDAO.save(dto);
+        return supplierDAO.save(new Supplier(dto.getSupId(),dto.getName(),dto.getDescription(),dto.getContacNo()));
     }
     @Override
     public boolean updateSupplier(SupplierDto dto) throws SQLException, ClassNotFoundException {
-        return supplierDAO.update(dto);
+        return supplierDAO.update(new Supplier(dto.getSupId(),dto.getName(),dto.getDescription(),dto.getContacNo()));
     }
     @Override
     public boolean deleteSupplier(String id) throws SQLException, ClassNotFoundException {
@@ -33,6 +41,7 @@ public class SupplierBOImpl implements SupplierBO {
     }
     @Override
     public SupplierDto searchSupplier(String newValue) throws SQLException, ClassNotFoundException {
-        return supplierDAO.search(newValue);
+        Supplier entity= supplierDAO.search(newValue);
+        return new SupplierDto(entity.getSupId(),entity.getName(),entity.getDescription(),entity.getContacNo());
     }
 }

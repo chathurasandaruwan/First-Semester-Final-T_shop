@@ -2,19 +2,20 @@ package lk.ijse.t_shop.dao.custom.impl;
 
 import lk.ijse.t_shop.dao.SQLUtil;
 import lk.ijse.t_shop.dao.custom.MachineDAO;
-import lk.ijse.t_shop.dto.MachineDto;
+import lk.ijse.t_shop.entity.Machine;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MachineDAOImpl implements MachineDAO {
     @Override
-    public ArrayList<MachineDto> getAll() throws SQLException, ClassNotFoundException {
+    public ArrayList<Machine> getAll() throws SQLException, ClassNotFoundException {
         ResultSet resultSet = SQLUtil.execute("SELECT * FROM machine");
-        ArrayList<MachineDto> dtos = new ArrayList<>();
+        ArrayList<Machine> dtos = new ArrayList<>();
         while (resultSet.next()){
             dtos.add(
-                    new MachineDto(
+                    new Machine(
                             resultSet.getString(1),
                             resultSet.getString(2),
                             resultSet.getString(3),
@@ -26,13 +27,13 @@ public class MachineDAOImpl implements MachineDAO {
     }
 
     @Override
-    public boolean save(MachineDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("INSERT INTO machine VALUES(?, ?, ?, ?)",dto.getMachineCode(),dto.getName(),dto.getMachineType(),dto.getTailerId());
+    public boolean save(Machine entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("INSERT INTO machine VALUES(?, ?, ?, ?)",entity.getMachineCode(),entity.getName(),entity.getMachineType(),entity.getTailerId());
     }
 
     @Override
-    public boolean update(MachineDto dto) throws SQLException, ClassNotFoundException {
-        return SQLUtil.execute("UPDATE machine SET name =?, machineType =?, tailerId =? WHERE machineCode = ?",dto.getName(),dto.getMachineType(),dto.getTailerId(),dto.getMachineCode());
+    public boolean update(Machine entity) throws SQLException, ClassNotFoundException {
+        return SQLUtil.execute("UPDATE machine SET name =?, machineType =?, tailerId =? WHERE machineCode = ?",entity.getName(),entity.getMachineType(),entity.getTailerId(),entity.getMachineCode());
     }
 
     @Override
@@ -64,15 +65,15 @@ public class MachineDAOImpl implements MachineDAO {
     }
 
     @Override
-    public MachineDto search(String newValue) throws SQLException, ClassNotFoundException {
+    public Machine search(String newValue) throws SQLException, ClassNotFoundException {
         ResultSet resultSet= SQLUtil.execute("SELECT * FROM machine WHERE machineCode = ?",newValue);
-        MachineDto dto=null;
+        Machine dto=null;
         if (resultSet.next()){
             String Code = resultSet.getString(1);
             String name = resultSet.getString(2);
             String type = resultSet.getString(3);
             String tId = resultSet.getString(4);
-            dto=new MachineDto(Code,name,type,tId);
+            dto=new Machine(Code,name,type,tId);
         }
         return dto;
     }
